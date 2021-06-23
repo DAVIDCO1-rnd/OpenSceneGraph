@@ -4,7 +4,7 @@
 int main(int argc, char** argv)
 {
 	osgViewer::Viewer viewer;
-	viewer.setSceneData(osgDB::readNodeFile("../../../../OpenSceneGraph-Data/cessna.osg"));
+	viewer.setSceneData(osgDB::readNodeFile("../../../OpenSceneGraph-Data-3.4.0/cessna.osg"));
 	return viewer.run();
 }
 
