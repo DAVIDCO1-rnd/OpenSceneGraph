@@ -1,11 +1,48 @@
-#include <osgDB/ReadFile>
-#include <osgViewer/Viewer>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+
+#include <osg/ref_ptr>
+#include <osg/Referenced>
+#include <iostream>
+
+class MonitoringTarget : public osg::Referenced
+{
+public:
+	MonitoringTarget(int id) : _id(id)
+	{
+		std::cout << "Constructing target " << _id << std::endl;
+	}
+protected:
+	virtual ~MonitoringTarget()
+	{
+		std::cout << "Destroying target " << _id << std::endl;
+	}
+	int _id;
+};
 
 int main(int argc, char** argv)
 {
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(osgDB::readNodeFile("../../../OpenSceneGraph-Data-3.4.0/cessna.osg"));
-	return viewer.run();
+	osg::ref_ptr<MonitoringTarget> target = new MonitoringTarget(0);
+	std::cout << "Referenced count before referring: "
+		<< target->referenceCount() << std::endl;
+	osg::ref_ptr<MonitoringTarget> anotherTarget = target;
+	std::cout << "Referenced count after referring: "
+		<< target->referenceCount() << std::endl;
+
+	//for (unsigned int i = 1; i < 5; ++i)
+	//{
+	//	osg::ref_ptr<MonitoringTarget> subTarget =
+	//		new MonitoringTarget(i);
+	//}
 }
 
 
