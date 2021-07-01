@@ -10,40 +10,156 @@
 //}
 
 
-#include <osg/ref_ptr>
-#include <osg/Referenced>
-#include <iostream>
 
-class MonitoringTarget : public osg::Referenced
-{
-public:
-	MonitoringTarget(int id) : _id(id)
-	{
-		std::cout << "Constructing target " << _id << std::endl;
-	}
-protected:
-	virtual ~MonitoringTarget()
-	{
-		std::cout << "Destroying target " << _id << std::endl;
-	}
-	int _id;
-};
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//#include <osg/ref_ptr>
+//#include <osg/Referenced>
+//#include <iostream>
+//
+//class MonitoringTarget : public osg::Referenced
+//{
+//public:
+//	MonitoringTarget(int id) : _id(id)
+//	{
+//		std::cout << "Constructing target " << _id << std::endl;
+//	}
+//protected:
+//	virtual ~MonitoringTarget()
+//	{
+//		std::cout << "Destroying target " << _id << std::endl;
+//	}
+//	int _id;
+//};
+//
+//MonitoringTarget* createMonitoringTarget(unsigned int id)
+//{
+//	osg::ref_ptr<MonitoringTarget> target = new MonitoringTarget(id);
+//	//return target.release();
+//	return target.get();
+//}
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<MonitoringTarget> target = new MonitoringTarget(0);	
+//	std::cout << "Referenced count before referring: "
+//		<< target->referenceCount() << std::endl;
+//	
+//	osg::ref_ptr<MonitoringTarget> anotherTarget = target;
+//	std::cout << "Referenced count after referring: "
+//		<< target->referenceCount() << std::endl;
+//
+//	std::cout << "\n";
+//
+//	for (unsigned int i = 1; i < 5; ++i)
+//	{
+//		//osg::ref_ptr<MonitoringTarget> subTarget = new MonitoringTarget(i);
+//		osg::ref_ptr<MonitoringTarget> subTarget = createMonitoringTarget(i);
+//	}
+//
+//	std::cout << "\n";
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ArgumentParser arguments(&argc, argv);
+//	std::string filename;
+//	arguments.read("--model", filename);
+//
+//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile(filename);
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//#include <fstream>
+//
+//class LogFileHandler : public osg::NotifyHandler
+//{
+//public:
+//	LogFileHandler(const std::string& file)
+//	{
+//		_log.open(file.c_str());
+//	}
+//	virtual ~LogFileHandler() { _log.close(); }
+//	virtual void notify(osg::NotifySeverity severity,
+//		const char* msg)
+//	{
+//		_log << msg;
+//	}
+//protected:
+//	std::ofstream _log;
+//};
+//
+//int main(int argc, char** argv)
+//{
+//	osg::setNotifyLevel(osg::INFO);
+//	osg::setNotifyHandler(new LogFileHandler("output.txt"));
+//	osg::ArgumentParser arguments(&argc, argv);
+//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFiles(
+//		arguments);
+//	if (!root)
+//	{
+//		OSG_FATAL << arguments.getApplicationName()
+//			<< ": No data loaded." << std::endl;
+//		return -1;
+//	}
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#include <osg/ShapeDrawable>
+#include <osg/Geode>
+#include <osgViewer/Viewer>
 
 int main(int argc, char** argv)
 {
-	osg::ref_ptr<MonitoringTarget> target = new MonitoringTarget(0);
-	std::cout << "Referenced count before referring: "
-		<< target->referenceCount() << std::endl;
-	osg::ref_ptr<MonitoringTarget> anotherTarget = target;
-	std::cout << "Referenced count after referring: "
-		<< target->referenceCount() << std::endl;
+	osg::ref_ptr<osg::ShapeDrawable> shape1 = new osg::ShapeDrawable;
+	shape1->setShape(new osg::Box(osg::Vec3(0.0f, 0.0f, 0.0f),
+		2.0f, 2.0f, 2.0f));
 
-	//for (unsigned int i = 1; i < 5; ++i)
-	//{
-	//	osg::ref_ptr<MonitoringTarget> subTarget =
-	//		new MonitoringTarget(i);
-	//}
+
+	osg::ref_ptr<osg::ShapeDrawable> shape2 = new osg::ShapeDrawable;
+	shape2->setShape(new osg::Sphere(osg::Vec3(3.0f, 0.0f, 0.0f),
+		3.0f));
+	shape2->setColor(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
+
+	//osg::ref_ptr<osg::ShapeDrawable> shape3 = new osg::ShapeDrawable;
+	//shape3->setShape(new osg::Cone(osg::Vec3(0.0f, 0.0f, 0.0f),
+	//	1.0f, 1.0f));
+	//shape3->setColor(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
+
+	osg::ref_ptr<osg::Geode> root = new osg::Geode;
+	root->addDrawable(shape1.get());
+	root->addDrawable(shape2.get());
+	//root->addDrawable(shape3.get());
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(root.get());
+	return viewer.run();
 }
+
 
 
 
