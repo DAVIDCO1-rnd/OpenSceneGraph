@@ -1,0 +1,15 @@
+cmake_minimum_required( VERSION 2.6 )
+project( MyProject )
+find_package( glut )
+macro( config_project PROJNAME LIBNAME )
+include_directories( ${${LIBNAME}_INCLUDE_DIR} )
+target_link_libraries( ${PROJNAME} ${${LIBNAME}_LIBRARY} )
+endmacro()
+add_executable( MyProject teapot.cpp )
+config_project( MyProject OPENTHREADS )
+config_project( MyProject OSG )
+config_project( MyProject OSGDB )
+config_project( MyProject OSGUTIL )
+config_project( MyProject GLUT )
+
+
