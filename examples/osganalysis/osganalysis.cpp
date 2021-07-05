@@ -453,51 +453,402 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <osg/Switch>
+//#include <osg/Switch>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//class AnimatingSwitch : public osg::Switch
+//{
+//public:
+//	AnimatingSwitch() : osg::Switch(), _count(0) {}
+//	AnimatingSwitch(const AnimatingSwitch& copy,
+//		const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY)
+//		: osg::Switch(copy, copyop), _count(copy._count) {}
+//	META_Node(osg, AnimatingSwitch);
+//	virtual void traverse(osg::NodeVisitor& nv);
+//protected:
+//	unsigned int _count;
+//};
+//
+//void AnimatingSwitch::traverse(osg::NodeVisitor& nv)
+//{
+//	if (!((++_count) % 60))
+//	{
+//		setValue(0, !getValue(0));
+//		setValue(1, !getValue(1));
+//	}
+//	osg::Switch::traverse(nv);
+//}
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
+//	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cessnafire.osg");
+//	osg::ref_ptr<AnimatingSwitch> root = new AnimatingSwitch;
+//	root->addChild(model1.get(), true);
+//	root->addChild(model2.get(), false);
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////page126
+
+//#include <osg/PolygonMode>
+//#include <osg/MatrixTransform>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cessna.osg");
+//	osg::ref_ptr<osg::MatrixTransform> transformation1 = new osg::MatrixTransform;
+//	transformation1->setMatrix(osg::Matrix::translate(-25.0f, 0.0f, 0.0f));
+//	transformation1->addChild(model.get());
+//	osg::ref_ptr<osg::MatrixTransform> transformation2 = new osg::MatrixTransform;
+//	transformation2->setMatrix(osg::Matrix::translate(25.0f, 0.0f, 0.0f));
+//	transformation2->addChild(model.get());
+//
+//	osg::ref_ptr<osg::PolygonMode> polygonMode = new osg::PolygonMode;
+//	polygonMode->setMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE);
+//	transformation1->getOrCreateStateSet()->setAttribute(polygonMode.get());
+//
+//	osg::ref_ptr<osg::Group> root = new osg::Group;
+//	root->addChild(transformation1.get());
+//	root->addChild(transformation2.get());
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//page 129
+
+//#include <osg/PolygonMode>
+//#include <osg/MatrixTransform>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("glider.osg");
+//	osg::ref_ptr<osg::MatrixTransform> transformation1 = new osg::MatrixTransform;
+//	transformation1->setMatrix(osg::Matrix::translate(-0.5f, 0.0f, 0.0f));
+//	transformation1->addChild(model.get());
+//	osg::ref_ptr<osg::MatrixTransform> transformation2 = new osg::MatrixTransform;
+//	transformation2->setMatrix(osg::Matrix::translate(0.5f, 0.0f, 0.0f));
+//	transformation2->addChild(model.get());
+//
+//	osg::ref_ptr<osg::Group> root = new osg::Group;
+//	root->addChild(transformation1.get());
+//	root->addChild(transformation2.get());
+//
+//	transformation1->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+//	transformation2->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED);
+//	root->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE);
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//page 134
+
+//#include <osg/Fog>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Fog> fog = new osg::Fog;
+//	fog->setMode(osg::Fog::LINEAR);
+//	fog->setStart(500.0f);
+//	fog->setEnd(2500.0f);
+//	fog->setColor(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
+//
+//	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("lz.osg");
+//	model->getOrCreateStateSet()->setAttributeAndModes(fog.get());
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(model.get());
+//	return viewer.run();
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//page 137
+
+//#include <osg/MatrixTransform>
+//#include <osg/LightSource>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//osg::Node* createLightSource(unsigned int num,
+//	const osg::Vec3& trans,
+//	const osg::Vec4& color)
+//{
+//	osg::ref_ptr<osg::Light> light = new osg::Light;
+//	light->setLightNum(num);
+//	light->setDiffuse(color);
+//	light->setPosition(osg::Vec4(0.0f, 0.0f, 0.0f, 1.0f));
+//	osg::ref_ptr<osg::LightSource> lightSource = new
+//		osg::LightSource;
+//	lightSource->setLight(light);
+//	osg::ref_ptr<osg::MatrixTransform> sourceTrans =
+//		new osg::MatrixTransform;
+//	sourceTrans->setMatrix(osg::Matrix::translate(trans));
+//	sourceTrans->addChild(lightSource.get());
+//	return sourceTrans.release();
+//}
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cessna.osg");
+//	osg::ref_ptr<osg::Group> root = new osg::Group;
+//	root->addChild(model.get());
+//
+//	osg::Node* light0 = createLightSource(0, osg::Vec3(-20.0f, 0.0f, 0.0f), osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
+//	osg::Node* light1 = createLightSource(1, osg::Vec3(0.0f, -20.0f, 0.0f), osg::Vec4(0.0f, 1.0f, 1.0f, 1.0f));
+//
+//	root->getOrCreateStateSet()->setMode(GL_LIGHT0, osg::StateAttribute::ON);
+//	root->getOrCreateStateSet()->setMode(GL_LIGHT1, osg::StateAttribute::ON);
+//	root->addChild(light0);
+//	root->addChild(light1);
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//page 143
+
+//#include <osg/Texture2D>
+//#include <osg/Geometry>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
+//	vertices->push_back(osg::Vec3(-0.5f, 0.0f, -0.5f));
+//	vertices->push_back(osg::Vec3(0.5f, 0.0f, -0.5f));
+//	vertices->push_back(osg::Vec3(0.5f, 0.0f, 0.5f));
+//	vertices->push_back(osg::Vec3(-0.5f, 0.0f, 0.5f));
+//	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
+//	normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
+//	osg::ref_ptr<osg::Vec2Array> texcoords = new osg::Vec2Array;
+//	texcoords->push_back(osg::Vec2(0.0f, 0.0f));
+//	texcoords->push_back(osg::Vec2(0.0f, 1.0f));
+//	texcoords->push_back(osg::Vec2(1.0f, 1.0f));
+//	texcoords->push_back(osg::Vec2(1.0f, 0.0f));
+//	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
+//	quad->setVertexArray(vertices.get());
+//	quad->setNormalArray(normals.get());
+//	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
+//	quad->setTexCoordArray(0, texcoords.get());
+//	quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
+//
+//	osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
+//	osg::ref_ptr<osg::Image> image = osgDB::readImageFile("Images/lz.rgb");
+//	texture->setImage(image.get());
+//
+//	osg::ref_ptr<osg::Geode> root = new osg::Geode;
+//	root->addDrawable(quad.get());
+//	root->getOrCreateStateSet()->setTextureAttributeAndModes(0, texture.get());
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//page 148
+
+//#include <osg/BlendFunc>
+//#include <osg/Texture2D>
+//#include <osg/Geometry>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
+//	vertices->push_back(osg::Vec3(-0.5f, 0.0f, -0.5f));
+//	vertices->push_back(osg::Vec3(0.5f, 0.0f, -0.5f));
+//	vertices->push_back(osg::Vec3(0.5f, 0.0f, 0.5f));
+//	vertices->push_back(osg::Vec3(-0.5f, 0.0f, 0.5f));
+//	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
+//	normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
+//	osg::ref_ptr<osg::Vec2Array> texcoords = new osg::Vec2Array;
+//	texcoords->push_back(osg::Vec2(0.0f, 0.0f));
+//	texcoords->push_back(osg::Vec2(0.0f, 1.0f));
+//	texcoords->push_back(osg::Vec2(1.0f, 1.0f));
+//	texcoords->push_back(osg::Vec2(1.0f, 0.0f));
+//	osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array;
+//	colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 0.5f));
+//	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
+//	quad->setVertexArray(vertices.get());
+//	quad->setNormalArray(normals.get());
+//	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
+//	quad->setColorArray(colors.get());
+//	quad->setColorBinding(osg::Geometry::BIND_OVERALL);
+//	quad->setTexCoordArray(0, texcoords.get());
+//	quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
+//	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+//	geode->addDrawable(quad.get());
+//
+//	osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
+//	osg::ref_ptr<osg::Image> image = osgDB::readImageFile("Images/lz.rgb");
+//	texture->setImage(image.get());
+//
+//	osg::ref_ptr<osg::BlendFunc> blendFunc = new osg::BlendFunc;
+//	blendFunc->setFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//
+//	osg::StateSet* stateset = geode->getOrCreateStateSet();
+//	stateset->setTextureAttributeAndModes(0, texture.get());
+//	stateset->setAttributeAndModes(blendFunc);
+//
+//	osg::ref_ptr<osg::Group> root = new osg::Group;
+//	root->addChild(geode.get());
+//	root->addChild(osgDB::readNodeFile("glider.osg"));
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//page 154 (shaders)
+
+//#include <osg/Program>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//static const char* vertSource = {
+//"varying vec3 normal;\n"
+//"void main()\n"
+//"{\n"
+//" normal = normalize(gl_NormalMatrix * gl_Normal);\n"
+//" gl_Position = ftransform();\n"
+//"}\n"
+//};
+//
+//static const char* fragSource = {
+//"uniform vec4 color1;\n"
+//"uniform vec4 color2;\n"
+//"uniform vec4 color3;\n"
+//"uniform vec4 color4;\n"
+//"varying vec3 normal;\n"
+//"void main()\n"
+//"{\n"
+//" float intensity = dot(vec3(gl_LightSource[0].position),normal); \n"
+//" if (intensity > 0.95) gl_FragColor = color1;\n"
+//" else if (intensity > 0.5) gl_FragColor = color2;\n"
+//" else if (intensity > 0.25) gl_FragColor = color3;\n"
+//" else gl_FragColor = color4;\n"
+//"}\n"
+//};
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Shader> vertShader = new osg::Shader(osg::Shader::VERTEX, vertSource);
+//	osg::ref_ptr<osg::Shader> fragShader = new osg::Shader(osg::Shader::FRAGMENT, fragSource);
+//	osg::ref_ptr<osg::Program> program = new osg::Program;
+//	program->addShader(vertShader.get());
+//	program->addShader(fragShader.get());
+//
+//	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cow.osg");
+//	osg::StateSet* stateset = model->getOrCreateStateSet();
+//	stateset->setAttributeAndModes(program.get());
+//	stateset->addUniform(new osg::Uniform("color1", osg::Vec4(1.0f, 0.5f, 0.5f, 1.0f)));
+//	stateset->addUniform(new osg::Uniform("color2", osg::Vec4(0.5f, 0.2f, 0.2f, 1.0f)));
+//	stateset->addUniform(new osg::Uniform("color3", osg::Vec4(0.2f, 0.1f, 0.1f, 1.0f)));
+//	stateset->addUniform(new osg::Uniform("color4", osg::Vec4(0.1f, 0.05f, 0.05f, 1.0f)));
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(model.get());
+//	return viewer.run();
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//page 158 (geometry shader - generating a Bezier curve)
+
+#include <osg/Program>
+#include <osg/LineWidth>
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 
-class AnimatingSwitch : public osg::Switch
-{
-public:
-	AnimatingSwitch() : osg::Switch(), _count(0) {}
-	AnimatingSwitch(const AnimatingSwitch& copy,
-		const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY)
-		: osg::Switch(copy, copyop), _count(copy._count) {}
-	META_Node(osg, AnimatingSwitch);
-	virtual void traverse(osg::NodeVisitor& nv);
-protected:
-	unsigned int _count;
+static const char* vertSource = {
+"#version 120\n"
+"#extension GL_EXT_geometry_shader4 : enable\n"
+"void main()\n"
+"{ gl_Position = ftransform(); }\n"
 };
 
-void AnimatingSwitch::traverse(osg::NodeVisitor& nv)
-{
-	if (!((++_count) % 60))
-	{
-		setValue(0, !getValue(0));
-		setValue(1, !getValue(1));
-	}
-	osg::Switch::traverse(nv);
-}
+static const char* geomSource = {
+"#version 120\n"
+"#extension GL_EXT_geometry_shader4 : enable\n"
+"uniform int segments;\n"
+"void main(void)\n"
+"{\n"
+" float delta = 1.0 / float(segments);\n"
+" vec4 v;\n"
+" for ( int i=0; i<=segments; ++i )\n"
+" {\n"
+" float t = delta * float(i);\n"
+" float t2 = t * t;\n"
+" float one_minus_t = 1.0 - t;\n"
+" float one_minus_t2 = one_minus_t * one_minus_t;\n"
+" v = gl_PositionIn[0] * one_minus_t2 * one_minus_t + \n"
+" gl_PositionIn[1] * 3.0 * t * one_minus_t2 +\n"
+" gl_PositionIn[2] * 3.0 * t2 * one_minus_t +\n"
+" gl_PositionIn[3] * t2 * t;\n"
+" gl_Position = v;\n"
+" EmitVertex();\n"
+" }\n"
+" EndPrimitive();\n"
+"}\n"
+};
 
 int main(int argc, char** argv)
 {
-	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
-	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cessnafire.osg");
-	osg::ref_ptr<AnimatingSwitch> root = new AnimatingSwitch;
-	root->addChild(model1.get(), true);
-	root->addChild(model2.get(), false);
+	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
+	vertices->push_back(osg::Vec3(0.0f, 0.0f, 0.0f));
+	vertices->push_back(osg::Vec3(1.0f, 1.0f, 1.0f));
+	vertices->push_back(osg::Vec3(2.0f, 1.0f, -1.0f));
+	vertices->push_back(osg::Vec3(3.0f, 0.0f, 0.0f));
+	osg::ref_ptr<osg::Geometry> controlPoints = new osg::Geometry;
+	controlPoints->setVertexArray(vertices.get());
+	controlPoints->addPrimitiveSet(new osg::DrawArrays(GL_LINES_ADJACENCY_EXT, 0, 4));
+	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+	geode->addDrawable(controlPoints.get());
+	int segments = 10;
+	osg::ref_ptr<osg::Program> program = new osg::Program;
+	program->addShader(new osg::Shader(osg::Shader::VERTEX, vertSource));
+	program->addShader(new osg::Shader(osg::Shader::GEOMETRY, geomSource));
+	program->setParameter(GL_GEOMETRY_VERTICES_OUT_EXT, segments + 1);
+	program->setParameter(GL_GEOMETRY_INPUT_TYPE_EXT, GL_LINES_ADJACENCY_EXT);
+	program->setParameter(GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_LINE_STRIP);
+
+	osg::ref_ptr<osg::LineWidth> lineWidth = new osg::LineWidth;
+	lineWidth->setWidth(2.0f);
+
+	osg::StateSet* stateset = geode->getOrCreateStateSet();
+	stateset->setAttributeAndModes(program.get());
+	stateset->setAttribute(lineWidth.get());
+	stateset->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+	stateset->addUniform(new osg::Uniform("segments", segments));
 
 	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
+	viewer.setSceneData(geode.get());
 	return viewer.run();
+
 }
-
-
-
-
-
-
 
 
 
