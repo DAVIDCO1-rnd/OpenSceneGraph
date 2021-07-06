@@ -505,9 +505,11 @@
 //int main(int argc, char** argv)
 //{
 //	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cessna.osg");
+//
 //	osg::ref_ptr<osg::MatrixTransform> transformation1 = new osg::MatrixTransform;
 //	transformation1->setMatrix(osg::Matrix::translate(-25.0f, 0.0f, 0.0f));
 //	transformation1->addChild(model.get());
+//
 //	osg::ref_ptr<osg::MatrixTransform> transformation2 = new osg::MatrixTransform;
 //	transformation2->setMatrix(osg::Matrix::translate(25.0f, 0.0f, 0.0f));
 //	transformation2->addChild(model.get());
@@ -836,7 +838,7 @@ int main(int argc, char** argv)
 	program->setParameter(GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_LINE_STRIP);
 
 	osg::ref_ptr<osg::LineWidth> lineWidth = new osg::LineWidth;
-	lineWidth->setWidth(2.0f);
+	lineWidth->setWidth(7.0f);
 
 	osg::StateSet* stateset = geode->getOrCreateStateSet();
 	stateset->setAttributeAndModes(program.get());
@@ -847,8 +849,95 @@ int main(int argc, char** argv)
 	osgViewer::Viewer viewer;
 	viewer.setSceneData(geode.get());
 	return viewer.run();
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
