@@ -269,7 +269,9 @@ int main( int argc, char **argv )
     }
 
     // if not loaded assume no arguments passed in, try use default mode instead.
-    if (!scene) scene = osgDB::readRefNodeFile("fountain.osgt");
+	if (!scene) {
+		scene = osgDB::readRefNodeFile("fountain.osgt");
+	}
 
     osg::ref_ptr<osg::Group> group = dynamic_cast<osg::Group*>(scene.get());
     if (!group)
