@@ -1,19 +1,19 @@
 
-////page 47 (70 of 412)
-//#include <osgDB/ReadFile>
-//#include <osgViewer/Viewer>
-//
-//int main(int argc, char** argv)
-//{
-//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");	
-//	osgViewer::Viewer viewer;
-//	if (root.valid() == true)
-//	{
-//		osg::Node* rootPointer = root.get();
-//		viewer.setSceneData(rootPointer);
-//	}
-//	return viewer.run();
-//}
+//page 47 (70 of 412)
+#include <osgDB/ReadFile>
+#include <osgViewer/Viewer>
+
+int main(int argc, char** argv)
+{
+	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");	
+	osgViewer::Viewer viewer;
+	if (root.valid() == true)
+	{
+		osg::Node* rootPointer = root.get();
+		viewer.setSceneData(rootPointer);
+	}
+	return viewer.run();
+}
 
 
 
@@ -95,44 +95,44 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//page 58 (81 of 412)
-#include <osgDB/ReadFile>
-#include <osgViewer/Viewer>
-#include <fstream>
-
-class LogFileHandler : public osg::NotifyHandler
-{
-public:
-	LogFileHandler(const std::string& file)
-	{
-		_log.open(file.c_str());
-	}
-	virtual ~LogFileHandler() { _log.close(); }
-	virtual void notify(osg::NotifySeverity severity,
-		const char* msg)
-	{
-		_log << msg;
-	}
-protected:
-	std::ofstream _log;
-};
-
-int main(int argc, char** argv)
-{
-	osg::setNotifyLevel(osg::INFO);
-	osg::setNotifyHandler(new LogFileHandler("output.txt"));
-	osg::ArgumentParser arguments(&argc, argv);
-	osg::ref_ptr<osg::Node> root = osgDB::readNodeFiles(arguments);
-	if (!root)
-	{
-		OSG_FATAL << arguments.getApplicationName()
-			<< ": No data loaded." << std::endl;
-		return -1;
-	}
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
-	return viewer.run();
-}
+////page 58 (81 of 412)
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//#include <fstream>
+//
+//class LogFileHandler : public osg::NotifyHandler
+//{
+//public:
+//	LogFileHandler(const std::string& file)
+//	{
+//		_log.open(file.c_str());
+//	}
+//	virtual ~LogFileHandler() { _log.close(); }
+//	virtual void notify(osg::NotifySeverity severity,
+//		const char* msg)
+//	{
+//		_log << msg;
+//	}
+//protected:
+//	std::ofstream _log;
+//};
+//
+//int main(int argc, char** argv)
+//{
+//	osg::setNotifyLevel(osg::INFO);
+//	osg::setNotifyHandler(new LogFileHandler("output.txt"));
+//	osg::ArgumentParser arguments(&argc, argv);
+//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFiles(arguments);
+//	if (!root)
+//	{
+//		OSG_FATAL << arguments.getApplicationName()
+//			<< ": No data loaded." << std::endl;
+//		return -1;
+//	}
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,29 +145,44 @@ int main(int argc, char** argv)
 //
 //int main(int argc, char** argv)
 //{
+//	
+//	osg::Vec3 boxCenter = osg::Vec3(-3.0f, 0.0f, 0.0f);
+//	float boxLengthX = 2.0f;
+//	float boxLengthY = 2.0f;
+//	float boxLengthZ = 1.0f;
+//	osg::Shape* boxShape = new osg::Box(boxCenter, boxLengthX, boxLengthY, boxLengthZ);
 //	osg::ref_ptr<osg::ShapeDrawable> shape1 = new osg::ShapeDrawable;
-//	shape1->setShape(new osg::Box(osg::Vec3(-3.0f, 0.0f, 0.0f),
-//		2.0f, 2.0f, 1.0f));
+//	shape1->setShape(boxShape);
+//	osg::ShapeDrawable* shape1_ptr = shape1.get();
 //
+//	
+//	osg::Vec3 sphereCenter = osg::Vec3(3.0f, 0.0f, 0.0f);
+//	float sphereRadius = 1.0f;
+//	osg::Shape* sphereShape = new osg::Sphere(sphereCenter, sphereRadius);
 //	osg::ref_ptr<osg::ShapeDrawable> shape2 = new osg::ShapeDrawable;
-//	shape2->setShape(new osg::Sphere(osg::Vec3(3.0f, 0.0f, 0.0f),
-//		1.0f));
+//	shape2->setShape(sphereShape);
 //	shape2->setColor(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
+//	osg::ShapeDrawable* shape2_ptr = shape2.get();
 //
+//	
+//	osg::Vec3 coneCenter = osg::Vec3(0.0f, 0.0f, 0.0f);
+//	float coneRadius = 1.0f;
+//	float coneHeight = 1.0f;
+//	osg::Shape* coneShape = new osg::Cone(coneCenter, coneRadius, coneHeight);
 //	osg::ref_ptr<osg::ShapeDrawable> shape3 = new osg::ShapeDrawable;
-//	shape3->setShape(new osg::Cone(osg::Vec3(0.0f, 0.0f, 0.0f),
-//		1.0f, 1.0f));
+//	shape3->setShape(coneShape);
 //	shape3->setColor(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
+//	osg::ShapeDrawable* shape3_ptr = shape3.get();
 //
-//	osg::ref_ptr<osg::ShapeDrawable> shapeCylinder = new osg::ShapeDrawable;
-//	shapeCylinder->setShape(new osg::Cylinder(osg::Vec3(0.0f, 0.0f, 0.0f), 5.0f, 10.0f));
-//	shapeCylinder->setColor(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
+//	//osg::ref_ptr<osg::ShapeDrawable> shapeCylinder = new osg::ShapeDrawable;
+//	//shapeCylinder->setShape(new osg::Cylinder(osg::Vec3(0.0f, 0.0f, 0.0f), 5.0f, 10.0f));
+//	//shapeCylinder->setColor(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
 //
 //	osg::ref_ptr<osg::Geode> root = new osg::Geode;
-//	root->addDrawable(shape1.get());
-//	root->addDrawable(shape2.get());
-//	root->addDrawable(shape3.get());
-//	root->addDrawable(shapeCylinder.get());
+//	root->addDrawable(shape1_ptr);
+//	root->addDrawable(shape2_ptr);
+//	root->addDrawable(shape3_ptr);
+//	//root->addDrawable(shapeCylinder.get());
 //	osgViewer::Viewer viewer;
 //	viewer.setSceneData(root.get());
 //	return viewer.run();
