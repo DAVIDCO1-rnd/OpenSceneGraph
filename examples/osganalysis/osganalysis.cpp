@@ -1,15 +1,19 @@
 
-//page 14
-#include <osgDB/ReadFile>
-#include <osgViewer/Viewer>
-
-int main(int argc, char** argv)
-{
-	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
-	return viewer.run();
-}
+////page 47 (70 of 412)
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");	
+//	osgViewer::Viewer viewer;
+//	if (root.valid() == true)
+//	{
+//		osg::Node* rootPointer = root.get();
+//		viewer.setSceneData(rootPointer);
+//	}
+//	return viewer.run();
+//}
 
 
 
@@ -17,7 +21,7 @@ int main(int argc, char** argv)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+////page 52 (75 of 412)
 //#include <osg/ref_ptr>
 //#include <osg/Referenced>
 //#include <iostream>
@@ -29,10 +33,11 @@ int main(int argc, char** argv)
 //	{
 //		std::cout << "Constructing target " << _id << std::endl;
 //	}
-//protected:
+////protected:
 //	virtual ~MonitoringTarget()
 //	{
-//		std::cout << "Destroying target " << _id << std::endl;
+//		//It is called by "delete this" in Refereced.cpp class whenever the reference count decreases to 0
+//		std::cout << "Destroying target " << _id << std::endl; 
 //	}
 //	int _id;
 //};
@@ -46,6 +51,7 @@ int main(int argc, char** argv)
 //
 //int main(int argc, char** argv)
 //{
+//	MonitoringTarget target1(0); // not possible since destructor ~MonitoringTarget() is protected
 //	osg::ref_ptr<MonitoringTarget> target = new MonitoringTarget(0);	
 //	std::cout << "Referenced count before referring: "
 //		<< target->referenceCount() << std::endl;
@@ -63,10 +69,13 @@ int main(int argc, char** argv)
 //	}
 //
 //	std::cout << "\n";
+//	std::cout << "The end of the main function" << std::endl;
+//	std::cout << "\n";
 //}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////page 55 (78 of 412)
 //#include <osgDB/ReadFile>
 //#include <osgViewer/Viewer>
 //
@@ -86,45 +95,44 @@ int main(int argc, char** argv)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//page 58 (81 of 412)
+#include <osgDB/ReadFile>
+#include <osgViewer/Viewer>
+#include <fstream>
 
-//#include <osgDB/ReadFile>
-//#include <osgViewer/Viewer>
-//#include <fstream>
-//
-//class LogFileHandler : public osg::NotifyHandler
-//{
-//public:
-//	LogFileHandler(const std::string& file)
-//	{
-//		_log.open(file.c_str());
-//	}
-//	virtual ~LogFileHandler() { _log.close(); }
-//	virtual void notify(osg::NotifySeverity severity,
-//		const char* msg)
-//	{
-//		_log << msg;
-//	}
-//protected:
-//	std::ofstream _log;
-//};
-//
-//int main(int argc, char** argv)
-//{
-//	osg::setNotifyLevel(osg::INFO);
-//	osg::setNotifyHandler(new LogFileHandler("output.txt"));
-//	osg::ArgumentParser arguments(&argc, argv);
-//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFiles(
-//		arguments);
-//	if (!root)
-//	{
-//		OSG_FATAL << arguments.getApplicationName()
-//			<< ": No data loaded." << std::endl;
-//		return -1;
-//	}
-//	osgViewer::Viewer viewer;
-//	viewer.setSceneData(root.get());
-//	return viewer.run();
-//}
+class LogFileHandler : public osg::NotifyHandler
+{
+public:
+	LogFileHandler(const std::string& file)
+	{
+		_log.open(file.c_str());
+	}
+	virtual ~LogFileHandler() { _log.close(); }
+	virtual void notify(osg::NotifySeverity severity,
+		const char* msg)
+	{
+		_log << msg;
+	}
+protected:
+	std::ofstream _log;
+};
+
+int main(int argc, char** argv)
+{
+	osg::setNotifyLevel(osg::INFO);
+	osg::setNotifyHandler(new LogFileHandler("output.txt"));
+	osg::ArgumentParser arguments(&argc, argv);
+	osg::ref_ptr<osg::Node> root = osgDB::readNodeFiles(arguments);
+	if (!root)
+	{
+		OSG_FATAL << arguments.getApplicationName()
+			<< ": No data loaded." << std::endl;
+		return -1;
+	}
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(root.get());
+	return viewer.run();
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
