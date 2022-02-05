@@ -154,94 +154,122 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//page 64 (87 of 412)
-#include <osg/ShapeDrawable>
-#include <osg/Geode>
-#include <osgViewer/Viewer>
-
-int main(int argc, char** argv)
-{
-	
-	osg::Vec3 boxCenter = osg::Vec3(-3.0f, 0.0f, 0.0f);
-	float boxLengthX = 2.0f;
-	float boxLengthY = 2.0f;
-	float boxLengthZ = 1.0f;
-	osg::Shape* boxShape = new osg::Box(boxCenter, boxLengthX, boxLengthY, boxLengthZ);
-	osg::ref_ptr<osg::ShapeDrawable> shape1 = new osg::ShapeDrawable;
-	shape1->setShape(boxShape);
-	osg::ShapeDrawable* shape1_ptr = shape1.get();
-
-	
-	osg::Vec3 sphereCenter = osg::Vec3(3.0f, 0.0f, 0.0f);
-	float sphereRadius = 1.0f;
-	osg::Shape* sphereShape = new osg::Sphere(sphereCenter, sphereRadius);
-	osg::ref_ptr<osg::ShapeDrawable> shape2 = new osg::ShapeDrawable;
-	shape2->setShape(sphereShape);
-	shape2->setColor(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
-	osg::ShapeDrawable* shape2_ptr = shape2.get();
-
-	
-	osg::Vec3 coneCenter = osg::Vec3(0.0f, 0.0f, 0.0f);
-	float coneRadius = 1.0f;
-	float coneHeight = 1.0f;
-	osg::Shape* coneShape = new osg::Cone(coneCenter, coneRadius, coneHeight);
-	osg::ref_ptr<osg::ShapeDrawable> shape3 = new osg::ShapeDrawable;
-	shape3->setShape(coneShape);
-	shape3->setColor(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
-	osg::ShapeDrawable* shape3_ptr = shape3.get();
-
-	//osg::ref_ptr<osg::ShapeDrawable> shapeCylinder = new osg::ShapeDrawable;
-	//shapeCylinder->setShape(new osg::Cylinder(osg::Vec3(0.0f, 0.0f, 0.0f), 5.0f, 10.0f));
-	//shapeCylinder->setColor(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
-
-	osg::ref_ptr<osg::Geode> root = new osg::Geode; //Geode is short of Geometry node
-	root->addDrawable(shape1_ptr);
-	root->addDrawable(shape2_ptr);
-	root->addDrawable(shape3_ptr);
-	//root->addDrawable(shapeCylinder.get());
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
-	return viewer.run();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//#include <osg/Geometry>
+////page 64 (87 of 412)
+//#include <osg/ShapeDrawable>
 //#include <osg/Geode>
 //#include <osgViewer/Viewer>
 //
 //int main(int argc, char** argv)
 //{
-//	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
-//	vertices->push_back(osg::Vec3(0.0f, 0.0f, 0.0f));
-//	vertices->push_back(osg::Vec3(1.0f, 0.0f, 0.0f));
-//	vertices->push_back(osg::Vec3(1.0f, 0.0f, 1.0f));
-//	vertices->push_back(osg::Vec3(0.0f, 0.0f, 1.0f));
+//	
+//	osg::Vec3 boxCenter = osg::Vec3(-3.0f, 0.0f, 0.0f);
+//	float boxLengthX = 2.0f;
+//	float boxLengthY = 2.0f;
+//	float boxLengthZ = 1.0f;
+//	osg::Shape* boxShape = new osg::Box(boxCenter, boxLengthX, boxLengthY, boxLengthZ);
+//	osg::ref_ptr<osg::ShapeDrawable> shape1 = new osg::ShapeDrawable;
+//	shape1->setShape(boxShape);
+//	osg::ShapeDrawable* shape1_ptr = shape1.get();
 //
-//	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
-//	normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
+//	
+//	osg::Vec3 sphereCenter = osg::Vec3(3.0f, 0.0f, 0.0f);
+//	float sphereRadius = 1.0f;
+//	osg::Shape* sphereShape = new osg::Sphere(sphereCenter, sphereRadius);
+//	osg::ref_ptr<osg::ShapeDrawable> shape2 = new osg::ShapeDrawable;
+//	shape2->setShape(sphereShape);
+//	shape2->setColor(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
+//	osg::ShapeDrawable* shape2_ptr = shape2.get();
 //
-//	osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array;
-//	colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
-//	colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
-//	colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
-//	colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f));
+//	
+//	osg::Vec3 coneCenter = osg::Vec3(0.0f, 0.0f, 0.0f);
+//	float coneRadius = 1.0f;
+//	float coneHeight = 1.0f;
+//	osg::Shape* coneShape = new osg::Cone(coneCenter, coneRadius, coneHeight);
+//	osg::ref_ptr<osg::ShapeDrawable> shape3 = new osg::ShapeDrawable;
+//	shape3->setShape(coneShape);
+//	shape3->setColor(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
+//	osg::ShapeDrawable* shape3_ptr = shape3.get();
 //
-//	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
-//	quad->setVertexArray(vertices.get());
-//	quad->setNormalArray(normals.get());
-//	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
-//	quad->setColorArray(colors.get());
-//	quad->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
+//	//osg::ref_ptr<osg::ShapeDrawable> shapeCylinder = new osg::ShapeDrawable;
+//	//shapeCylinder->setShape(new osg::Cylinder(osg::Vec3(0.0f, 0.0f, 0.0f), 5.0f, 10.0f));
+//	//shapeCylinder->setColor(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
 //
-//	quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
+//	osg::ref_ptr<osg::Geode> root = new osg::Geode; //Geode is short of Geometry node
+//	root->addDrawable(shape1_ptr);
+//	root->addDrawable(shape2_ptr);
+//	root->addDrawable(shape3_ptr);
+//	//root->addDrawable(shapeCylinder.get());
 //
-//	osg::ref_ptr<osg::Geode> root = new osg::Geode;
-//	root->addDrawable(quad.get());
+//	//unsigned int numOfDrawables = root->getNumDrawables();
+//	//for (unsigned int i = 0; i < numOfDrawables; i++)
+//	//{
+//	//	osg::Drawable* currentDrawable = root->getDrawable(i);
+//	//}
+//	//root->removeDrawables(0, numOfDrawables);
+//	
 //	osgViewer::Viewer viewer;
 //	viewer.setSceneData(root.get());
 //	return viewer.run();
 //}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//page 69 (92 of 412)
+#include <osg/Geometry>
+#include <osg/Geode>
+#include <osgViewer/Viewer>
+
+int main(int argc, char** argv)
+{
+	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
+	osg::Vec3 vertex1 = osg::Vec3(0.0f, 0.0f, 0.0f);
+	osg::Vec3 vertex2 = osg::Vec3(1.0f, 0.0f, 0.0f);
+	osg::Vec3 vertex3 = osg::Vec3(1.0f, 0.0f, 1.0f);
+	osg::Vec3 vertex4 = osg::Vec3(0.0f, 0.0f, 1.0f);
+
+	vertices->push_back(vertex1);
+	vertices->push_back(vertex2);
+	vertices->push_back(vertex3);
+	vertices->push_back(vertex4);
+
+	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
+	osg::Vec3 normal1 = osg::Vec3(0.0f, -1.0f, 0.0f);
+	normals->push_back(normal1);
+
+	osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array;
+	osg::Vec4 color1 = osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	osg::Vec4 color2 = osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	osg::Vec4 color3 = osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	osg::Vec4 color4 = osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	colors->push_back(color1);
+	colors->push_back(color2);
+	colors->push_back(color3);
+	colors->push_back(color4);
+
+	osg::Vec3Array* verticesPtr = vertices.get();
+	osg::Vec3Array* normalsPtr = normals.get();
+	osg::Vec4Array* colorsPtr = colors.get();
+
+	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
+	quad->setVertexArray(verticesPtr);
+	quad->setNormalArray(normalsPtr);
+	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
+	quad->setColorArray(colorsPtr);
+	quad->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
+
+	osg::DrawArrays* quadPrimitive = new osg::DrawArrays(GL_QUADS, 0, 4);
+
+	quad->addPrimitiveSet(quadPrimitive);
+	osg::Geometry* quadPtr = quad.get();
+
+	osg::ref_ptr<osg::Geode> root = new osg::Geode;
+	osg::Geode* rootPtr = root.get();
+	root->addDrawable(quadPtr);
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(rootPtr);
+	return viewer.run();
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
