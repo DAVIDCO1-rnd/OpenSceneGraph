@@ -1,19 +1,19 @@
 
-//page 47 (70 of 412)
-#include <osgDB/ReadFile>
-#include <osgViewer/Viewer>
-
-int main(int argc, char** argv)
-{
-	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");	
-	osgViewer::Viewer viewer;
-	if (root.valid() == true)
-	{
-		osg::Node* rootPointer = root.get();
-		viewer.setSceneData(rootPointer);
-	}
-	return viewer.run();
-}
+////page 47 (70 of 412)
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");	
+//	osgViewer::Viewer viewer;
+//	if (root.valid() == true)
+//	{
+//		osg::Node* rootPointer = root.get();
+//		viewer.setSceneData(rootPointer);
+//	}
+//	return viewer.run();
+//}
 
 
 
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 //	{
 //		std::cout << "Constructing target " << _id << std::endl;
 //	}
-////protected:
+//protected:
 //	virtual ~MonitoringTarget()
 //	{
 //		//It is called by "delete this" in Refereced.cpp class whenever the reference count decreases to 0
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 //
 //int main(int argc, char** argv)
 //{
-//	MonitoringTarget target1(0); // not possible since destructor ~MonitoringTarget() is protected
+//	//MonitoringTarget target1(0); // not possible since destructor ~MonitoringTarget() is protected
 //	osg::ref_ptr<MonitoringTarget> target = new MonitoringTarget(0);	
 //	std::cout << "Referenced count before referring: "
 //		<< target->referenceCount() << std::endl;
@@ -59,6 +59,11 @@ int main(int argc, char** argv)
 //	osg::ref_ptr<MonitoringTarget> anotherTarget = target;
 //	std::cout << "Referenced count after referring: "
 //		<< target->referenceCount() << std::endl;
+//
+//	//osg::ref_ptr<MonitoringTarget> target2 = new MonitoringTarget(0);
+//	//anotherTarget = target2;
+//	//std::cout << "Referenced count after referring: "
+//	//	<< target->referenceCount() << std::endl;
 //
 //	std::cout << "\n";
 //
@@ -108,6 +113,7 @@ int main(int argc, char** argv)
 //		_log.open(file.c_str());
 //	}
 //	virtual ~LogFileHandler() { _log.close(); }
+//	//called by _handler->notify(_severity, pbase()); in Notify.cpp
 //	virtual void notify(osg::NotifySeverity severity,
 //		const char* msg)
 //	{
@@ -119,10 +125,20 @@ int main(int argc, char** argv)
 //
 //int main(int argc, char** argv)
 //{
+//	//osg::setNotifyLevel(osg::ALWAYS);		//osg::ALWAYS - most severity
+//	//osg::setNotifyLevel(osg::FATAL);
+//	//osg::setNotifyLevel(osg::WARN);
+//	//osg::setNotifyLevel(osg::NOTICE);
 //	osg::setNotifyLevel(osg::INFO);
-//	osg::setNotifyHandler(new LogFileHandler("output.txt"));
+//	//osg::setNotifyLevel(osg::DEBUG_INFO);
+//	//osg::setNotifyLevel(osg::DEBUG_FP);		//osg::DEBUG_FP - least severity
+//
+//
+//	LogFileHandler* logFileHandlerPointer = new LogFileHandler("output.txt");
+//	osg::setNotifyHandler(logFileHandlerPointer);
 //	osg::ArgumentParser arguments(&argc, argv);
 //	osg::ref_ptr<osg::Node> root = osgDB::readNodeFiles(arguments);
+//	//osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");
 //	if (!root)
 //	{
 //		OSG_FATAL << arguments.getApplicationName()
@@ -138,55 +154,55 @@ int main(int argc, char** argv)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+//page 64 (87 of 412)
+#include <osg/ShapeDrawable>
+#include <osg/Geode>
+#include <osgViewer/Viewer>
 
-//#include <osg/ShapeDrawable>
-//#include <osg/Geode>
-//#include <osgViewer/Viewer>
-//
-//int main(int argc, char** argv)
-//{
-//	
-//	osg::Vec3 boxCenter = osg::Vec3(-3.0f, 0.0f, 0.0f);
-//	float boxLengthX = 2.0f;
-//	float boxLengthY = 2.0f;
-//	float boxLengthZ = 1.0f;
-//	osg::Shape* boxShape = new osg::Box(boxCenter, boxLengthX, boxLengthY, boxLengthZ);
-//	osg::ref_ptr<osg::ShapeDrawable> shape1 = new osg::ShapeDrawable;
-//	shape1->setShape(boxShape);
-//	osg::ShapeDrawable* shape1_ptr = shape1.get();
-//
-//	
-//	osg::Vec3 sphereCenter = osg::Vec3(3.0f, 0.0f, 0.0f);
-//	float sphereRadius = 1.0f;
-//	osg::Shape* sphereShape = new osg::Sphere(sphereCenter, sphereRadius);
-//	osg::ref_ptr<osg::ShapeDrawable> shape2 = new osg::ShapeDrawable;
-//	shape2->setShape(sphereShape);
-//	shape2->setColor(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
-//	osg::ShapeDrawable* shape2_ptr = shape2.get();
-//
-//	
-//	osg::Vec3 coneCenter = osg::Vec3(0.0f, 0.0f, 0.0f);
-//	float coneRadius = 1.0f;
-//	float coneHeight = 1.0f;
-//	osg::Shape* coneShape = new osg::Cone(coneCenter, coneRadius, coneHeight);
-//	osg::ref_ptr<osg::ShapeDrawable> shape3 = new osg::ShapeDrawable;
-//	shape3->setShape(coneShape);
-//	shape3->setColor(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
-//	osg::ShapeDrawable* shape3_ptr = shape3.get();
-//
-//	//osg::ref_ptr<osg::ShapeDrawable> shapeCylinder = new osg::ShapeDrawable;
-//	//shapeCylinder->setShape(new osg::Cylinder(osg::Vec3(0.0f, 0.0f, 0.0f), 5.0f, 10.0f));
-//	//shapeCylinder->setColor(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
-//
-//	osg::ref_ptr<osg::Geode> root = new osg::Geode;
-//	root->addDrawable(shape1_ptr);
-//	root->addDrawable(shape2_ptr);
-//	root->addDrawable(shape3_ptr);
-//	//root->addDrawable(shapeCylinder.get());
-//	osgViewer::Viewer viewer;
-//	viewer.setSceneData(root.get());
-//	return viewer.run();
-//}
+int main(int argc, char** argv)
+{
+	
+	osg::Vec3 boxCenter = osg::Vec3(-3.0f, 0.0f, 0.0f);
+	float boxLengthX = 2.0f;
+	float boxLengthY = 2.0f;
+	float boxLengthZ = 1.0f;
+	osg::Shape* boxShape = new osg::Box(boxCenter, boxLengthX, boxLengthY, boxLengthZ);
+	osg::ref_ptr<osg::ShapeDrawable> shape1 = new osg::ShapeDrawable;
+	shape1->setShape(boxShape);
+	osg::ShapeDrawable* shape1_ptr = shape1.get();
+
+	
+	osg::Vec3 sphereCenter = osg::Vec3(3.0f, 0.0f, 0.0f);
+	float sphereRadius = 1.0f;
+	osg::Shape* sphereShape = new osg::Sphere(sphereCenter, sphereRadius);
+	osg::ref_ptr<osg::ShapeDrawable> shape2 = new osg::ShapeDrawable;
+	shape2->setShape(sphereShape);
+	shape2->setColor(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
+	osg::ShapeDrawable* shape2_ptr = shape2.get();
+
+	
+	osg::Vec3 coneCenter = osg::Vec3(0.0f, 0.0f, 0.0f);
+	float coneRadius = 1.0f;
+	float coneHeight = 1.0f;
+	osg::Shape* coneShape = new osg::Cone(coneCenter, coneRadius, coneHeight);
+	osg::ref_ptr<osg::ShapeDrawable> shape3 = new osg::ShapeDrawable;
+	shape3->setShape(coneShape);
+	shape3->setColor(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
+	osg::ShapeDrawable* shape3_ptr = shape3.get();
+
+	//osg::ref_ptr<osg::ShapeDrawable> shapeCylinder = new osg::ShapeDrawable;
+	//shapeCylinder->setShape(new osg::Cylinder(osg::Vec3(0.0f, 0.0f, 0.0f), 5.0f, 10.0f));
+	//shapeCylinder->setColor(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
+
+	osg::ref_ptr<osg::Geode> root = new osg::Geode; //Geode is short of Geometry node
+	root->addDrawable(shape1_ptr);
+	root->addDrawable(shape2_ptr);
+	root->addDrawable(shape3_ptr);
+	//root->addDrawable(shapeCylinder.get());
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(root.get());
+	return viewer.run();
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
