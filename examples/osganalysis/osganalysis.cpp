@@ -214,66 +214,70 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//page 69 (92 of 412)
-#include <osg/Geometry>
-#include <osg/Geode>
-#include <osgViewer/Viewer>
-
-int main(int argc, char** argv)
-{
-	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
-	osg::Vec3 vertex1 = osg::Vec3(0.0f, 0.0f, 0.0f);
-	osg::Vec3 vertex2 = osg::Vec3(1.0f, 0.0f, 0.0f);
-	osg::Vec3 vertex3 = osg::Vec3(1.0f, 0.0f, 1.0f);
-	osg::Vec3 vertex4 = osg::Vec3(0.0f, 0.0f, 1.0f);
-
-	vertices->push_back(vertex1);
-	vertices->push_back(vertex2);
-	vertices->push_back(vertex3);
-	vertices->push_back(vertex4);
-
-	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
-	osg::Vec3 normal1 = osg::Vec3(0.0f, -1.0f, 0.0f);
-	normals->push_back(normal1);
-
-	osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array;
-	osg::Vec4 color1 = osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	osg::Vec4 color2 = osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f);
-	osg::Vec4 color3 = osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f);
-	osg::Vec4 color4 = osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	colors->push_back(color1);
-	colors->push_back(color2);
-	colors->push_back(color3);
-	colors->push_back(color4);
-
-	osg::Vec3Array* verticesPtr = vertices.get();
-	osg::Vec3Array* normalsPtr = normals.get();
-	osg::Vec4Array* colorsPtr = colors.get();
-
-	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
-	quad->setVertexArray(verticesPtr);
-	quad->setNormalArray(normalsPtr);
-	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
-	quad->setColorArray(colorsPtr);
-	quad->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
-
-	osg::DrawArrays* quadPrimitive = new osg::DrawArrays(GL_QUADS, 0, 4);
-
-	quad->addPrimitiveSet(quadPrimitive);
-	osg::Geometry* quadPtr = quad.get();
-
-	osg::ref_ptr<osg::Geode> root = new osg::Geode;
-	osg::Geode* rootPtr = root.get();
-	root->addDrawable(quadPtr);
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(rootPtr);
-	return viewer.run();
-}
+////page 69 (92 of 412)
+//#include <osg/Geometry>
+//#include <osg/Geode>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
+//	osg::Vec3 vertex1 = osg::Vec3(0.0f, 0.0f, 0.0f);
+//	osg::Vec3 vertex2 = osg::Vec3(1.0f, 0.0f, 0.0f);
+//	osg::Vec3 vertex3 = osg::Vec3(1.0f, 0.0f, 1.0f);
+//	osg::Vec3 vertex4 = osg::Vec3(0.0f, 0.0f, 1.0f);
+//
+//	vertices->push_back(vertex1);
+//	vertices->push_back(vertex2);
+//	vertices->push_back(vertex3);
+//	vertices->push_back(vertex4);
+//
+//	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
+//	osg::Vec3 normal1 = osg::Vec3(0.0f, -1.0f, 0.0f);
+//	normals->push_back(normal1);
+//
+//	osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array;
+//	osg::Vec4 color1 = osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f);
+//	osg::Vec4 color2 = osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f);
+//	osg::Vec4 color3 = osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f);
+//	osg::Vec4 color4 = osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f);
+//
+//	colors->push_back(color1);
+//	colors->push_back(color2);
+//	colors->push_back(color3);
+//	colors->push_back(color4);
+//
+//	osg::Vec3Array* verticesPtr = vertices.get();
+//	osg::Vec3Array* normalsPtr = normals.get();
+//	osg::Vec4Array* colorsPtr = colors.get();
+//
+//	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
+//	quad->setVertexArray(verticesPtr);
+//	quad->setNormalArray(normalsPtr);
+//	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
+//	quad->setColorArray(colorsPtr);
+//	quad->setColorBinding(osg::Geometry::BIND_PER_VERTEX); //color for each vertex
+//
+//	GLenum mode = GL_QUADS;
+//	GLint first = 0;
+//	GLsizei count = 4;
+//	osg::DrawArrays* quadPrimitiveSetPointer = new osg::DrawArrays(mode, first, count);
+//	//osg::DrawArrays inherits from osg::PrimitiveSet (I think..)
+//
+//	quad->addPrimitiveSet(quadPrimitiveSetPointer);
+//	osg::Geometry* quadPtr = quad.get();
+//
+//	osg::ref_ptr<osg::Geode> root = new osg::Geode;
+//	osg::Geode* rootPtr = root.get();
+//	root->addDrawable(quadPtr);
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(rootPtr);
+//	return viewer.run();
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+////page 73 (96 of 412)
 //#include <osg/Geometry>
 //#include <osg/Geode>
 //#include <osgUtil/SmoothingVisitor>
@@ -289,6 +293,15 @@ int main(int argc, char** argv)
 //	(*vertices)[4].set(-0.5f, 0.5f, 0.0f);
 //	(*vertices)[5].set(0.0f, 0.0f, -1.0f);
 //
+//	osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array(6);
+//	(*colors)[0].set(0.0f, 0.0f, 0.0f, 1.0f);
+//	(*colors)[1].set(1.0f, 0.0f, 0.0f, 1.0f);
+//	(*colors)[2].set(0.0f, 1.0f, 0.0f, 1.0f);
+//	(*colors)[3].set(0.0f, 0.0f, 1.0f, 1.0f);
+//	(*colors)[4].set(1.0f, 1.0f, 1.0f, 1.0f);
+//	(*colors)[5].set(0.0f, 0.0f, 0.0f, 1.0f);
+//
+//
 //	osg::ref_ptr<osg::DrawElementsUInt> indices =
 //		new osg::DrawElementsUInt(GL_TRIANGLES, 24);
 //	(*indices)[0] = 0; (*indices)[1] = 1; (*indices)[2] = 2;
@@ -302,8 +315,11 @@ int main(int argc, char** argv)
 //
 //	osg::ref_ptr<osg::Geometry> geom = new osg::Geometry;
 //	geom->setVertexArray(vertices.get());
+//	geom->setColorArray(colors.get());
+//	geom->setColorBinding(osg::Geometry::BIND_PER_VERTEX); //color for each vertex
 //	geom->addPrimitiveSet(indices.get());
 //	osgUtil::SmoothingVisitor::smooth(*geom);
+//	
 //
 //	osg::ref_ptr<osg::Geode> root = new osg::Geode;
 //	root->addDrawable(geom.get());
@@ -314,6 +330,7 @@ int main(int argc, char** argv)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////page 78 (101 of 412)
 //#include <osg/Geometry>
 //#include <osg/Geode>
 //#include <osgUtil/Tessellator>
@@ -339,8 +356,8 @@ int main(int argc, char** argv)
 //	geom->setNormalBinding(osg::Geometry::BIND_OVERALL);
 //	geom->addPrimitiveSet(new osg::DrawArrays(GL_POLYGON, 0, 8));
 //
-//	//osgUtil::Tessellator tessellator;
-//	//tessellator.retessellatePolygons(*geom);
+//	osgUtil::Tessellator tessellator;
+//	tessellator.retessellatePolygons(*geom);
 //
 //	osg::ref_ptr<osg::Geode> root = new osg::Geode;
 //	root->addDrawable(geom.get());
@@ -352,6 +369,7 @@ int main(int argc, char** argv)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////page 83 (106 of 412)
 //#include <osg/Geometry>
 //#include <osg/Geode>
 //#include <osgUtil/Tessellator>
@@ -359,15 +377,18 @@ int main(int argc, char** argv)
 //#include <osg/TriangleFunctor>
 //#include <iostream>
 //
-////struct FaceCollector
-////{
-////	void operator()(const osg::Vec3& v1, const osg::Vec3& v2,
-////		const osg::Vec3& v3, bool)
-////	{
-////		std::cout << "Face vertices: " << v1 << "; " << v2 << "; "
-////			<< v3 << std::endl;
-////	}
-////};
+//struct FaceCollector
+//{
+//	void operator()(const osg::Vec3& v1, const osg::Vec3& v2,
+//		const osg::Vec3& v3)
+//	{
+//		//std::cout << "Face vertices: " << v1 << "; " << v2 << "; "
+//		//	<< v3 << std::endl;
+//
+//		std::cout << "Face vertices: " << v1[0] << "," << v1[1] << "," << v1[2] << ";     " << v2[0] << "," << v2[1] << "," << v2[2] << ";     "
+//			<< v3[0] << "," << v3[1] << "," << v3[2] << std::endl;
+//	}
+//};
 //
 //int main(int argc, char** argv)
 //{
@@ -388,8 +409,7 @@ int main(int argc, char** argv)
 //	geom->setVertexArray(vertices.get());
 //	geom->setNormalArray(normals.get());
 //	geom->setNormalBinding(osg::Geometry::BIND_OVERALL);
-//	geom->addPrimitiveSet(new osg::DrawArrays(GL_QUAD_STRIP, 0, 10)
-//	);
+//	geom->addPrimitiveSet(new osg::DrawArrays(GL_QUAD_STRIP, 0, 10));
 //
 //	osg::ref_ptr<osg::Geode> root = new osg::Geode;
 //	root->addDrawable(geom.get());
@@ -397,30 +417,89 @@ int main(int argc, char** argv)
 //	viewer.setSceneData(root.get());
 //	viewer.run();
 //
-//	//osg::TriangleFunctor<FaceCollector> functor;
-//	//geom->accept(functor);
+//	osg::TriangleFunctor<FaceCollector> functor;
+//	geom->accept(functor);
 //}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//#include <osg/Group>
-//#include <osgDB/ReadFile>
+////page 88 (111 of 412)
+////NOT compiled - need to do some changes in CMake
+//#include <gl/glut.h>
+//#include <osg/Drawable>
+//#include <osg/Geode>
 //#include <osgViewer/Viewer>
+//
+//class TeapotDrawable : public osg::Drawable
+//{
+//public:
+//	TeapotDrawable(float size = 1.0f) : _size(size) {}
+//	TeapotDrawable(const TeapotDrawable& copy,
+//		const osg::CopyOp&
+//		copyop = osg::CopyOp::SHALLOW_COPY)
+//		: osg::Drawable(copy, copyop), _size(copy._size) {}
+//	META_Object(osg, TeapotDrawable);
+//	virtual osg::BoundingBox computeBound() const;
+//	virtual void drawImplementation(osg::RenderInfo&) const;
+//protected:
+//	float _size;
+//};
+//
+//osg::BoundingBox TeapotDrawable::computeBound() const
+//{
+//	osg::Vec3 min(-_size, -_size, -_size), max(_size, _size, _size);
+//	return osg::BoundingBox(min, max);
+//}
+//
+//void TeapotDrawable::drawImplementation(osg::RenderInfo&
+//	renderInfo) const
+//{
+//	glFrontFace(GL_CW);
+//	glutSolidTeapot(_size);
+//	glFrontFace(GL_CCW);
+//}
 //
 //int main(int argc, char** argv)
 //{
-//	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
-//	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cow.osg");
-//
-//	osg::ref_ptr<osg::Group> root = new osg::Group;
-//	root->addChild(model1.get());
-//	root->addChild(model2.get());
-//
+//	osg::ref_ptr<osg::Geode> root = new osg::Geode;
+//	root->addDrawable(new TeapotDrawable(1.0f));
 //	osgViewer::Viewer viewer;
 //	viewer.setSceneData(root.get());
 //	return viewer.run();
 //}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//page 96 (119 of 412)
+#include <osg/Group>
+#include <osgDB/ReadFile>
+#include <osgViewer/Viewer>
+
+int main(int argc, char** argv)
+{
+	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
+	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cow.osg");
+
+	osg::ref_ptr<osg::Group> root = new osg::Group;
+	root->addChild(model1.get());
+	root->addChild(model2.get());
+
+	osg::NodePathList nodePathList = model2->getParentalNodePaths();
+	osg::NodePath& nodePath = nodePathList[0];
+	size_t nodePathSize = nodePath.size();
+	for (unsigned int i = 0; i < nodePathSize; i++)
+	{
+		osg::Node* node = nodePath[i];
+		std::string nodeName = node->getName();
+		std::cout << "node " << i << " name: " << nodeName << std::endl;
+	}
+
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(root.get());
+	return viewer.run();
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
