@@ -472,8 +472,39 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//page 96 (119 of 412)
-#include <osg/Group>
+////page 96 (119 of 412)
+//#include <osg/Group>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
+//	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cow.osg");
+//
+//	osg::ref_ptr<osg::Group> root = new osg::Group;
+//	root->addChild(model1.get());
+//	root->addChild(model2.get());
+//
+//	osg::NodePathList nodePathList = model2->getParentalNodePaths();
+//	osg::NodePath& nodePath = nodePathList[0];
+//	size_t nodePathSize = nodePath.size();
+//	for (unsigned int i = 0; i < nodePathSize; i++)
+//	{
+//		osg::Node* node = nodePath[i];
+//		std::string nodeName = node->getName();
+//		std::cout << "node " << i << " name: " << nodeName << std::endl;
+//	}
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//page 101 (124 of 412)
+#include <osg/MatrixTransform>
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 
@@ -482,51 +513,23 @@ int main(int argc, char** argv)
 	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
 	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cow.osg");
 
+	osg::ref_ptr<osg::MatrixTransform> transformation1 = new osg::MatrixTransform;
+	osg::Matrixd translateMatrix1 = osg::Matrix::translate(-25.0f, 0.0f, 0.0f);
+	transformation1->setMatrix(translateMatrix1);
+	transformation1->addChild(model1.get());
+
+	osg::ref_ptr<osg::MatrixTransform> transformation2 = new osg::MatrixTransform;
+	osg::Matrixd translateMatrix2 = osg::Matrix::translate(25.0f, 0.0f, 0.0f);
+	transformation2->setMatrix(translateMatrix2);
+	transformation2->addChild(model2.get());
+
 	osg::ref_ptr<osg::Group> root = new osg::Group;
-	root->addChild(model1.get());
-	root->addChild(model2.get());
-
-	osg::NodePathList nodePathList = model2->getParentalNodePaths();
-	osg::NodePath& nodePath = nodePathList[0];
-	size_t nodePathSize = nodePath.size();
-	for (unsigned int i = 0; i < nodePathSize; i++)
-	{
-		osg::Node* node = nodePath[i];
-		std::string nodeName = node->getName();
-		std::cout << "node " << i << " name: " << nodeName << std::endl;
-	}
-
+	root->addChild(transformation1.get());
+	root->addChild(transformation2.get());
 	osgViewer::Viewer viewer;
 	viewer.setSceneData(root.get());
 	return viewer.run();
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//#include <osg/MatrixTransform>
-//#include <osgDB/ReadFile>
-//#include <osgViewer/Viewer>
-//
-//int main(int argc, char** argv)
-//{
-//	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cessna.osg");
-//
-//	osg::ref_ptr<osg::MatrixTransform> transformation1 = new osg::MatrixTransform;
-//	transformation1->setMatrix(osg::Matrix::translate(-25.0f, 0.0f, 0.0f));
-//	transformation1->addChild(model.get());
-//
-//	osg::ref_ptr<osg::MatrixTransform> transformation2 = new osg::MatrixTransform;
-//	transformation2->setMatrix(osg::Matrix::translate(25.0f, 0.0f, 0.0f));
-//	transformation2->addChild(model.get());
-//
-//	osg::ref_ptr<osg::Group> root = new osg::Group;
-//	root->addChild(transformation1.get());
-//	root->addChild(transformation2.get());
-//	osgViewer::Viewer viewer;
-//	viewer.setSceneData(root.get());
-//	return viewer.run();
-//}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
