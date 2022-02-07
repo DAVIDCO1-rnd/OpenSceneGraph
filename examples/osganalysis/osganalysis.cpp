@@ -510,18 +510,26 @@
 
 int main(int argc, char** argv)
 {
+	osg::Matrix scaleMatrix1 = osg::Matrix::scale(2.0, 2.0, 2.0);
+	osg::Vec3 vec(1, 3, 0);
+	osg::Vec3 resultVec = vec * scaleMatrix1;
+
 	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
-	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cow.osg");
+	//osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cow.osg");
 
 	osg::ref_ptr<osg::MatrixTransform> transformation1 = new osg::MatrixTransform;
-	osg::Matrixd translateMatrix1 = osg::Matrix::translate(-25.0f, 0.0f, 0.0f);
-	transformation1->setMatrix(translateMatrix1);
+	osg::Matrixd translateMatrix1 = osg::Matrix::translate(0.0f, 0.0f, 0.0f);
+	//double angle = 0.0;
+	//osg::Vec3 axisOfRotation = osg::Vec3(0.0f, 1.0f, 0.0f);
+	//osg::Matrixd rotationMatrix1 = osg::Matrix::rotate(angle, axisOfRotation);
+	transformation1->setMatrix(scaleMatrix1);
+	//transformation1->postMult(rotationMatrix1);
 	transformation1->addChild(model1.get());
 
 	osg::ref_ptr<osg::MatrixTransform> transformation2 = new osg::MatrixTransform;
-	osg::Matrixd translateMatrix2 = osg::Matrix::translate(25.0f, 0.0f, 0.0f);
+	osg::Matrixd translateMatrix2 = osg::Matrix::translate(25.0f, 0.0f, 25.0f);
 	transformation2->setMatrix(translateMatrix2);
-	transformation2->addChild(model2.get());
+	transformation2->addChild(model1.get());
 
 	osg::ref_ptr<osg::Group> root = new osg::Group;
 	root->addChild(transformation1.get());
