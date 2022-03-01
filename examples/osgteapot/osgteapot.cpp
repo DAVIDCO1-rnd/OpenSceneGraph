@@ -19,6 +19,7 @@
 #include <osg/Geode>
 #include <osg/TexGen>
 #include <osg/Texture2D>
+#include <osg/LineWidth>
 
 #include <osgDB/ReadFile>
 
@@ -306,9 +307,91 @@ class Teapot : public osg::Drawable
 osg::Geode* createTeapot()
 {
     osg::Geode* geode = new osg::Geode();
-
+	Teapot* teapotModel = new Teapot();
     // add the teapot to the geode.
-    geode->addDrawable( new Teapot );
+    
+	osg::BoundingBox bb = teapotModel->computeBoundingBox();
+	//osg::BoundingBox bb (0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+	osg::Vec3 point0 = bb.corner(0);
+	osg::Vec3 point1 = bb.corner(1);
+	osg::Vec3 point2 = bb.corner(2);
+	osg::Vec3 point3 = bb.corner(3);
+	osg::Vec3 point4 = bb.corner(4);
+	osg::Vec3 point5 = bb.corner(5);
+	osg::Vec3 point6 = bb.corner(6);
+	osg::Vec3 point7 = bb.corner(7);
+
+	osg::Vec3Array* vertices = new osg::Vec3Array(8);
+	(*vertices)[0] = point0;
+	(*vertices)[1] = point1;
+	(*vertices)[2] = point2;
+	(*vertices)[3] = point3;
+	(*vertices)[4] = point4;
+	(*vertices)[5] = point5;
+	(*vertices)[6] = point6;
+	(*vertices)[7] = point7;
+
+	// create Geometry object to store all the vetices and lines primtive.
+		osg::Geometry* linesGeom = new osg::Geometry();
+	// pass the created vertex array to the points geometry object.
+	linesGeom->setVertexArray(vertices);
+
+	// set the colors as before, plus using the aobve
+	osg::Vec4Array* colors = new osg::Vec4Array;
+	colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	linesGeom->setColorArray(colors);
+	linesGeom->setColorBinding(osg::Geometry::BIND_OVERALL);
+
+	GLushort indices[] = {
+	//4 lines of front face
+	0,1,
+	1,5,
+	0,4,
+	4,5,
+	
+	//4 lines of back face
+	2,3,
+	3,7,
+	2,6,
+	6,7,
+
+	//2 vertical lines of right face
+	1,3,
+	5,7,
+
+	//2 vertical lines of left face
+	0,2,
+	4,6
+
+	////diagonals
+	//,
+	//0,5,
+	//3,6,
+	//1,7,
+	//5,6,
+	//2,4,
+	//0,3
+	////other diagonals
+	//,
+	//1,4,
+	//2,7,
+	//3,5,
+	//4,7,
+	//0,6,
+	//1,2
+	};
+
+	unsigned int numOfLinesEdges = sizeof(indices) / sizeof(GLushort);
+
+	linesGeom->addPrimitiveSet(new osg::DrawElementsUShort(osg::PrimitiveSet::LINES, numOfLinesEdges, indices));
+
+	osg::LineWidth* linewidth = new osg::LineWidth();
+	linewidth->setWidth(22.0f);
+	linesGeom->getOrCreateStateSet()->setAttributeAndModes(linewidth, osg::StateAttribute::ON);
+
+	geode->addDrawable(linesGeom);
+	geode->addDrawable(teapotModel);
+
 
     // add a reflection map to the teapot.
     osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile("Images/reflect.rgb");
