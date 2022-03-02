@@ -503,46 +503,46 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//page 101 (124 of 412)
-#include <osg/MatrixTransform>
-#include <osgDB/ReadFile>
-#include <osgViewer/Viewer>
-
-int main(int argc, char** argv)
-{
-	osg::Matrix scaleMatrix1 = osg::Matrix::scale(2.0, 2.0, 2.0);
-	osg::Vec3 vec(1, 3, 0);
-	osg::Vec3 resultVec = vec * scaleMatrix1;
-
-	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
-	//osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cow.osg");
-
-	osg::ref_ptr<osg::MatrixTransform> transformation1 = new osg::MatrixTransform;
-	osg::Matrixd translateMatrix1 = osg::Matrix::translate(0.0f, 0.0f, 0.0f);
-	//double angle = 0.0;
-	//osg::Vec3 axisOfRotation = osg::Vec3(0.0f, 1.0f, 0.0f);
-	//osg::Matrixd rotationMatrix1 = osg::Matrix::rotate(angle, axisOfRotation);
-	transformation1->setMatrix(scaleMatrix1);
-	//transformation1->postMult(rotationMatrix1);
-	transformation1->addChild(model1.get());
-
-	osg::ref_ptr<osg::MatrixTransform> transformation2 = new osg::MatrixTransform;
-	osg::Matrixd translateMatrix2 = osg::Matrix::translate(25.0f, 0.0f, 25.0f);
-	transformation2->setMatrix(translateMatrix2);
-	transformation2->addChild(model1.get());
-
-	osg::ref_ptr<osg::Group> root = new osg::Group;
-	root->addChild(transformation1.get());
-	root->addChild(transformation2.get());
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
-	return viewer.run();
-}
+////page 101 (124 of 412)
+//#include <osg/MatrixTransform>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::Matrix scaleMatrix1 = osg::Matrix::scale(2.0, 2.0, 2.0);
+//	osg::Vec3 vec(1, 3, 0);
+//	osg::Vec3 resultVec = vec * scaleMatrix1;
+//
+//	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
+//	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cow.osg");
+//
+//	osg::ref_ptr<osg::MatrixTransform> transformation1 = new osg::MatrixTransform;
+//	osg::Matrixd translateMatrix1 = osg::Matrix::translate(0.0f, 0.0f, 0.0f);
+//	//double angle = 0.0;
+//	//osg::Vec3 axisOfRotation = osg::Vec3(0.0f, 1.0f, 0.0f);
+//	//osg::Matrixd rotationMatrix1 = osg::Matrix::rotate(angle, axisOfRotation);
+//	transformation1->setMatrix(scaleMatrix1);
+//	//transformation1->postMult(rotationMatrix1);
+//	transformation1->addChild(model1.get());
+//
+//	osg::ref_ptr<osg::MatrixTransform> transformation2 = new osg::MatrixTransform;
+//	osg::Matrixd translateMatrix2 = osg::Matrix::translate(0.0f, 0.0f, 0.25f);
+//	transformation2->setMatrix(translateMatrix2);
+//	transformation2->addChild(model2.get());
+//
+//	osg::ref_ptr<osg::Group> root = new osg::Group;
+//	root->addChild(transformation1.get());
+//	root->addChild(transformation2.get());
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+////page 105 (128 of 412)
 //#include <osg/Switch>
 //#include <osgDB/ReadFile>
 //#include <osgViewer/Viewer>
@@ -553,8 +553,20 @@ int main(int argc, char** argv)
 //	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cessnafire.osg");
 //
 //	osg::ref_ptr<osg::Switch> root = new osg::Switch;
-//	root->addChild(model1.get(), false);
-//	root->addChild(model2.get(), true);
+//
+//	//the default of all the children is false. so if you call root->addChild(model1) it will NOT render since the default is false
+//	root->setNewChildDefaultValue(false);
+//
+//	bool model1Val = false;
+//	bool model2Val = true;
+//	root->addChild(model1.get(), model1Val);
+//	root->addChild(model2.get(), model2Val);
+//
+//	bool val1 = root->getValue(0); //should be the same as model1Val
+//	bool val2 = root->getValue(1); //should be the same as model2Val
+//
+//	//root->setValue(0, true); //now model1 is seen
+//	//root->setValue(1, true); //now model2 is seen
 //
 //	osgViewer::Viewer viewer;
 //	viewer.setSceneData(root.get());
@@ -563,6 +575,7 @@ int main(int argc, char** argv)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////page 108 (131 of 412)
 //#include <osg/LOD>
 //#include <osgDB/ReadFile>
 //#include <osgUtil/Simplifier>
@@ -572,10 +585,8 @@ int main(int argc, char** argv)
 //int main(int argc, char** argv)
 //{
 //	osg::ref_ptr<osg::Node> modelL3 = osgDB::readNodeFile("cessna.osg");
-//	osg::ref_ptr<osg::Node> modelL2 = dynamic_cast<osg::Node*>(
-//			modelL3->clone(osg::CopyOp::DEEP_COPY_ALL));
-//	osg::ref_ptr<osg::Node> modelL1 = dynamic_cast<osg::Node*>(
-//		modelL3->clone(osg::CopyOp::DEEP_COPY_ALL));
+//	osg::ref_ptr<osg::Node> modelL2 = dynamic_cast<osg::Node*>(modelL3->clone(osg::CopyOp::DEEP_COPY_ALL));
+//	osg::ref_ptr<osg::Node> modelL1 = dynamic_cast<osg::Node*>(modelL3->clone(osg::CopyOp::DEEP_COPY_ALL));
 //
 //	osgUtil::Simplifier simplifier;
 //
@@ -584,6 +595,7 @@ int main(int argc, char** argv)
 //	simplifier.setSampleRatio(0.1);
 //	modelL1->accept(simplifier);
 //
+//	//osg::LOD is derived from osg::GROUP
 //	osg::ref_ptr<osg::LOD> root = new osg::LOD;
 //	root->addChild(modelL1.get(), 200.0f, FLT_MAX);
 //	root->addChild(modelL2.get(), 50.0f, 200.0f);
@@ -596,12 +608,22 @@ int main(int argc, char** argv)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+////page 110 (133 of 412)
 //#include <osg/ProxyNode>
 //#include <osgViewer/Viewer>
 //
 //int main(int argc, char** argv)
 //{
+//	//The osg::ProxyNode node will reduce the start time of the viewer if there are huge numbers of models to be loaded and displayed in the scene graph. It is able to function as the interface of external files, help applications to start up as soon as possible, and then read those waiting models by using an independent data thread.It uses setFileName() rather than addChild() to set a model file and dynamically load it as a child.
+//
+//	//The osg::PagedLOD node also inherits methods of osg::LOD, but dynamically loads and unloads levels of detail in order to avoid overloading the graphics pipeline and keep the rendering process as smooth as possible.
+//
+//	/*
+//	Instead of just loading model files as child nodes, we will set a filename to the
+//	specified index of children. This is similar to the insertChild() method, which
+//	puts a node into the specified position of the children list, but the list will not be
+//	filled until the dynamic loading process has finished.
+//	*/
 //	osg::ref_ptr<osg::ProxyNode> root = new osg::ProxyNode;
 //	root->setFileName(0, "cow.osg");
 //
@@ -612,45 +634,46 @@ int main(int argc, char** argv)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//#include <osg/Switch>
-//#include <osgDB/ReadFile>
-//#include <osgViewer/Viewer>
-//
-//class AnimatingSwitch : public osg::Switch
-//{
-//public:
-//	AnimatingSwitch() : osg::Switch(), _count(0) {}
-//	AnimatingSwitch(const AnimatingSwitch& copy,
-//		const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY)
-//		: osg::Switch(copy, copyop), _count(copy._count) {}
-//	META_Node(osg, AnimatingSwitch);
-//	virtual void traverse(osg::NodeVisitor& nv);
-//protected:
-//	unsigned int _count;
-//};
-//
-//void AnimatingSwitch::traverse(osg::NodeVisitor& nv)
-//{
-//	if (!((++_count) % 60))
-//	{
-//		setValue(0, !getValue(0));
-//		setValue(1, !getValue(1));
-//	}
-//	osg::Switch::traverse(nv);
-//}
-//
-//int main(int argc, char** argv)
-//{
-//	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
-//	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cessnafire.osg");
-//	osg::ref_ptr<AnimatingSwitch> root = new AnimatingSwitch;
-//	root->addChild(model1.get(), true);
-//	root->addChild(model2.get(), false);
-//
-//	osgViewer::Viewer viewer;
-//	viewer.setSceneData(root.get());
-//	return viewer.run();
-//}
+//page 113 (136 of 412)
+#include <osg/Switch>
+#include <osgDB/ReadFile>
+#include <osgViewer/Viewer>
+
+class AnimatingSwitch : public osg::Switch
+{
+public:
+	AnimatingSwitch() : osg::Switch(), _count(0) {}
+	AnimatingSwitch(const AnimatingSwitch& copy,
+		const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY)
+		: osg::Switch(copy, copyop), _count(copy._count) {}
+	META_Node(osg, AnimatingSwitch);
+	virtual void traverse(osg::NodeVisitor& nv);
+protected:
+	unsigned int _count;
+};
+
+void AnimatingSwitch::traverse(osg::NodeVisitor& nv)
+{
+	if (!((++_count) % 60))
+	{
+		setValue(0, !getValue(0));
+		setValue(1, !getValue(1));
+	}
+	osg::Switch::traverse(nv);
+}
+
+int main(int argc, char** argv)
+{
+	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
+	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cessnafire.osg");
+	osg::ref_ptr<AnimatingSwitch> root = new AnimatingSwitch;
+	root->addChild(model1.get(), true);
+	root->addChild(model2.get(), false);
+
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(root.get());
+	return viewer.run();
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
