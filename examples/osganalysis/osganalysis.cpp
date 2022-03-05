@@ -634,51 +634,196 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//page 113 (136 of 412)
-#include <osg/Switch>
-#include <osgDB/ReadFile>
-#include <osgViewer/Viewer>
-
-class AnimatingSwitch : public osg::Switch
-{
-public:
-	AnimatingSwitch() : osg::Switch(), _count(0) {}
-	AnimatingSwitch(const AnimatingSwitch& copy,
-		const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY)
-		: osg::Switch(copy, copyop), _count(copy._count) {}
-	META_Node(osg, AnimatingSwitch);
-	virtual void traverse(osg::NodeVisitor& nv);
-protected:
-	unsigned int _count;
-};
-
-void AnimatingSwitch::traverse(osg::NodeVisitor& nv)
-{
-	if (!((++_count) % 60))
-	{
-		setValue(0, !getValue(0));
-		setValue(1, !getValue(1));
-	}
-	osg::Switch::traverse(nv);
-}
-
-int main(int argc, char** argv)
-{
-	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
-	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cessnafire.osg");
-	osg::ref_ptr<AnimatingSwitch> root = new AnimatingSwitch;
-	root->addChild(model1.get(), true);
-	root->addChild(model2.get(), false);
-
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
-	return viewer.run();
-}
+////page 113 (136 of 412)
+//#include <osg/Switch>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//#include <osgUtil/UpdateVisitor>
+//#include <osgUtil/CullVisitor>
+////#include <osgUtil/EventVisitor> //no such file
+//
+//class AnimatingSwitch : public osg::Switch
+//{
+//public:
+//	AnimatingSwitch() : osg::Switch(), _count(0), _update_counter(0), _event_counter(0), _cull_counter(0) {}
+//	AnimatingSwitch(const AnimatingSwitch& copy, const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY)
+//		: osg::Switch(copy, copyop), _count(copy._count) {}
+//	META_Node(osg, AnimatingSwitch);
+//	virtual void traverse(osg::NodeVisitor& nv);
+//protected:
+//	unsigned int _count;
+//	unsigned int _update_counter;
+//	unsigned int _event_counter;
+//	unsigned int _cull_counter;
+//};
+//
+//void AnimatingSwitch::traverse(osg::NodeVisitor& nodeVisitor)
+//{
+//	osgUtil::UpdateVisitor* updateVisitor = dynamic_cast<osgUtil::UpdateVisitor*>(&nodeVisitor);
+//	//if (updateVisitor != NULL) //not sure it's the same
+//	if (nodeVisitor.getVisitorType() == osg::NodeVisitor::UPDATE_VISITOR)
+//	{
+//		_update_counter++;
+//		printf("UPDATE_VISITOR\n");
+//		printf("_update_counter=%d, _event_counter=%d, _cull_counter=%d\n\n", _update_counter, _event_counter, _cull_counter);
+//	}
+//
+//	//Didn't see osgUtils::EventVisitor or anything similar
+//	if (nodeVisitor.getVisitorType() == osg::NodeVisitor::EVENT_VISITOR)
+//	{
+//		_event_counter++;
+//		printf("EVENT_VISITOR\n");
+//		printf("_update_counter=%d, _event_counter=%d, _cull_counter=%d\n\n", _update_counter, _event_counter, _cull_counter);
+//	}
+//
+//	osgUtil::CullVisitor* cullVisitor = dynamic_cast<osgUtil::CullVisitor*>(&nodeVisitor);
+//	//if (cullVisitor != NULL) //not sure it's the same
+//	if (nodeVisitor.getVisitorType() == osg::NodeVisitor::CULL_VISITOR)
+//	{
+//		_cull_counter++;
+//		printf("CULL_VISITOR\n");
+//		printf("_update_counter=%d, _event_counter=%d, _cull_counter=%d\n\n", _update_counter, _event_counter, _cull_counter);
+//	}
+//	
+//	//The hardware refresh rate is often 60 Hz (This if is called 60 times a second).
+//	//Therefore, the if condition will become true once per second.
+//	if (!((++_count) % 60))
+//	{
+//		setValue(0, !getValue(0));
+//		setValue(1, !getValue(1));
+//	}
+//	osg::Switch::traverse(nodeVisitor);
+//}
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Node> model1 = osgDB::readNodeFile("cessna.osg");
+//	osg::ref_ptr<osg::Node> model2 = osgDB::readNodeFile("cessnafire.osg");
+//	osg::ref_ptr<AnimatingSwitch> root = new AnimatingSwitch;
+//	root->addChild(model1.get(), true);
+//	root->addChild(model2.get(), false);
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	int runResult = viewer.run();
+//	return runResult;
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//page126
+////page 118 (141 of 412)
+//
+///*
+//User applications may always search the loaded scene graph for nodes of interest after
+//loading a model file. For example, we might like to take charge of the transformation or
+//visibility of the loaded model if the root node is osg::Transform or osg::Switch. We
+//might also be interested in collecting all transformation nodes at the joints of a skeleton,
+//which can be used to perform character animations later.
+//
+//The analysis of the loaded model structure is important in that case. We will implement an
+//information printing visitor here, which prints the basic information of visited nodes and
+//arranges them in a tree structure.
+//*/
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//#include <iostream>
+//
+//class InfoVisitor : public osg::NodeVisitor
+//{
+//public:
+//	InfoVisitor() : _level(0)
+//	{
+//		setTraversalMode(osg::NodeVisitor::TRAVERSE_ALL_CHILDREN);
+//
+//		//setTraversalMode(osg::NodeVisitor::TRAVERSE_PARENTS); //backtracks from current node until arriving at the root node
+//		//setTraversalMode(osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN); //only visits active children nodes, for instance, the visible children of a osg::Switch node.
+//	}
+//	std::string spaces()
+//	{
+//		return std::string(_level * 2, ' ');
+//	}
+//	virtual void apply(osg::Node& node);
+//	virtual void apply(osg::Geode& geode);
+//protected:
+//	unsigned int _level;
+//};
+//
+///*
+//We will introduce two methods className() and libraryName(), both of
+//which return const char* values, for instance, "Node" as the class name and "osg"
+//as the library name. There is no trick in re-implementing these two methods for
+//different classes. The META_Object and META_Node macro definitions will do the
+//work internally:
+//*/
+//void InfoVisitor::apply(osg::Node& node)
+//{
+//	std::cout << spaces() << "node parameter,  " << node.libraryName() << "::" << node.className() << std::endl;
+//	_level++;
+//	/*
+//	The tranverse method is instructing the visitor to traverse to the next node (can be a child or a sibling node if the current node has no children to visit).
+//	Not calling the traverse() mothod means to stop the traversal at once, and the rest of the scene graph is ignored without performing any operations.
+//	*/
+//	traverse(node); 
+//	_level--;
+//}
+//
+///*
+//The implementation of the apply() overloaded method with the osg::Geode&
+//parameter is slightly different from the previous one. It iterates all attached
+//drawables of the osg::Geode node and prints their information, too. Be aware of
+//the calling time of traverse() here, which ensures that the level of each node in
+//the tree is correct.
+//*/
+//void InfoVisitor::apply(osg::Geode& geode)
+//{
+//	std::cout << spaces() << geode.libraryName() << "::" << geode.className() << std::endl;
+//	_level++;
+//	for (unsigned int i = 0; i < geode.getNumDrawables(); ++i)
+//	{
+//		osg::Drawable* drawable = geode.getDrawable(i);
+//		std::cout << spaces() << "geode parameter,  drawable " << i << ", " << drawable->libraryName() << "::" << drawable->className() << std::endl;
+//	}
+//	traverse(geode);
+//	_level--;
+//}
+//
+//int main(int argc, char** argv)
+//{
+//	/*
+//	In the main function, use osgDB::readNodeFiles() to read a file from command
+//line arguments:
+//	*/
+//	//osg::ArgumentParser arguments(&argc, argv);
+//	//osg::ref_ptr<osg::Node> root = osgDB::readNodeFiles(arguments);	
+//	//if (!root)
+//	//{
+//	//	OSG_FATAL << arguments.getApplicationName() << ": No data loaded." << std::endl;
+//	//		return -1;
+//	//}
+//
+//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessnafire.osg");
+//
+//	/*
+//	Use the customized InfoVisitor to visit the loaded model now. You will have
+//	noticed that the setTraversalMode() method is called in the constructor of the
+//	visitor in order to enable the traversal of all of its children:
+//	*/
+//	InfoVisitor infoVisitor;
+//	root->accept(infoVisitor);
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////page 126 (149 of 412)
+//
 //#include <osg/PolygonMode>
 //#include <osg/MatrixTransform>
 //#include <osgDB/ReadFile>
@@ -698,12 +843,16 @@ int main(int argc, char** argv)
 //	transformation2->addChild(model.get());
 //
 //	osg::ref_ptr<osg::PolygonMode> polygonMode1 = new osg::PolygonMode;
+//	//the state of a node will affect the current node and its children
 //	polygonMode1->setMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE);
-//	transformation1->getOrCreateStateSet()->setAttribute(polygonMode1.get());
+//	osg::StateSet* stateSet1 = transformation1->getOrCreateStateSet();
+//	stateSet1->setAttribute(polygonMode1.get());
+//	
 //
 //	osg::ref_ptr<osg::PolygonMode> polygonMode2 = new osg::PolygonMode;
 //	polygonMode2->setMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL);
-//	transformation2->getOrCreateStateSet()->setAttribute(polygonMode2.get());
+//	osg::StateSet* stateSet2 = transformation2->getOrCreateStateSet();
+//	stateSet2->setAttribute(polygonMode2.get());
 //
 //	osg::ref_ptr<osg::Group> root = new osg::Group;
 //	root->addChild(transformation1.get());
@@ -715,8 +864,8 @@ int main(int argc, char** argv)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//page 129
-
+////page 129 (152 of 412)
+//
 //#include <osg/PolygonMode>
 //#include <osg/MatrixTransform>
 //#include <osgDB/ReadFile>
@@ -749,8 +898,9 @@ int main(int argc, char** argv)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//page 134
 
+////page 134 (157 of 412)
+//
 //#include <osg/Fog>
 //#include <osgDB/ReadFile>
 //#include <osgViewer/Viewer>
@@ -772,45 +922,46 @@ int main(int argc, char** argv)
 //}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//page 137
 
-//#include <osg/MatrixTransform>
-//#include <osg/LightSource>
-//#include <osgDB/ReadFile>
-//#include <osgViewer/Viewer>
-//
-//osg::Node* createLightSource(unsigned int num, const osg::Vec3& trans, const osg::Vec4& color)
-//{
-//	osg::ref_ptr<osg::Light> light = new osg::Light;
-//	light->setLightNum(num);
-//	light->setDiffuse(color);
-//	light->setPosition(osg::Vec4(0.0f, 0.0f, 0.0f, 1.0f));
-//	osg::ref_ptr<osg::LightSource> lightSource = new osg::LightSource;
-//	lightSource->setLight(light);
-//	osg::ref_ptr<osg::MatrixTransform> sourceTrans = new osg::MatrixTransform;
-//	sourceTrans->setMatrix(osg::Matrix::translate(trans));
-//	sourceTrans->addChild(lightSource.get());
-//	return sourceTrans.release();
-//}
-//
-//int main(int argc, char** argv)
-//{
-//	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cessna.osg");
-//	osg::ref_ptr<osg::Group> root = new osg::Group;
-//	root->addChild(model.get());
-//
-//	osg::Node* light0 = createLightSource(0, osg::Vec3(-20.0f, 0.0f, 0.0f), osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
-//	osg::Node* light1 = createLightSource(1, osg::Vec3(20.0f, 0.0f, 0.0f), osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
-//
-//	root->getOrCreateStateSet()->setMode(GL_LIGHT0, osg::StateAttribute::ON);
-//	root->getOrCreateStateSet()->setMode(GL_LIGHT1, osg::StateAttribute::ON);
-//	root->addChild(light0);
-//	root->addChild(light1);
-//
-//	osgViewer::Viewer viewer;
-//	viewer.setSceneData(root.get());
-//	return viewer.run();
-//}
+//page 137 (160 of 412)
+
+#include <osg/MatrixTransform>
+#include <osg/LightSource>
+#include <osgDB/ReadFile>
+#include <osgViewer/Viewer>
+
+osg::Node* createLightSource(unsigned int num, const osg::Vec3& trans, const osg::Vec4& color)
+{
+	osg::ref_ptr<osg::Light> light = new osg::Light;
+	light->setLightNum(num);
+	light->setDiffuse(color);
+	light->setPosition(osg::Vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	osg::ref_ptr<osg::LightSource> lightSource = new osg::LightSource;
+	lightSource->setLight(light);
+	osg::ref_ptr<osg::MatrixTransform> sourceTrans = new osg::MatrixTransform;
+	sourceTrans->setMatrix(osg::Matrix::translate(trans));
+	sourceTrans->addChild(lightSource.get());
+	return sourceTrans.release();
+}
+
+int main(int argc, char** argv)
+{
+	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cessna.osg");
+	osg::ref_ptr<osg::Group> root = new osg::Group;
+	root->addChild(model.get());
+
+	osg::Node* light0 = createLightSource(0, osg::Vec3(-20.0f, 0.0f, 0.0f), osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	osg::Node* light1 = createLightSource(1, osg::Vec3(20.0f, 0.0f, 0.0f), osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
+	root->getOrCreateStateSet()->setMode(GL_LIGHT0, osg::StateAttribute::ON);
+	root->getOrCreateStateSet()->setMode(GL_LIGHT1, osg::StateAttribute::ON);
+	root->addChild(light0);
+	root->addChild(light1);
+
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(root.get());
+	return viewer.run();
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //page 143
