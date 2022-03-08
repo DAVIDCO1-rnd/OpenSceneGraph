@@ -1,3 +1,6 @@
+#include <vector>
+
+using namespace std;
 
 ////page 47 (70 of 412)
 //#include <osgDB/ReadFile>
@@ -923,87 +926,102 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//page 137 (160 of 412)
-
-#include <osg/MatrixTransform>
-#include <osg/LightSource>
-#include <osgDB/ReadFile>
-#include <osgViewer/Viewer>
-
-osg::Node* createLightSource(unsigned int num, const osg::Vec3& trans, const osg::Vec4& color)
-{
-	osg::ref_ptr<osg::Light> light = new osg::Light;
-	light->setLightNum(num);
-	light->setDiffuse(color);
-	light->setPosition(osg::Vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	osg::ref_ptr<osg::LightSource> lightSource = new osg::LightSource;
-	lightSource->setLight(light);
-	osg::ref_ptr<osg::MatrixTransform> sourceTrans = new osg::MatrixTransform;
-	sourceTrans->setMatrix(osg::Matrix::translate(trans));
-	sourceTrans->addChild(lightSource.get());
-	return sourceTrans.release();
-}
-
-int main(int argc, char** argv)
-{
-	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cessna.osg");
-	osg::ref_ptr<osg::Group> root = new osg::Group;
-	root->addChild(model.get());
-
-	osg::Node* light0 = createLightSource(0, osg::Vec3(-20.0f, 0.0f, 0.0f), osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	osg::Node* light1 = createLightSource(1, osg::Vec3(20.0f, 0.0f, 0.0f), osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
-
-	root->getOrCreateStateSet()->setMode(GL_LIGHT0, osg::StateAttribute::ON);
-	root->getOrCreateStateSet()->setMode(GL_LIGHT1, osg::StateAttribute::ON);
-	root->addChild(light0);
-	root->addChild(light1);
-
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
-	return viewer.run();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//page 143
-
-//#include <osg/Texture2D>
-//#include <osg/Geometry>
+////page 137 (160 of 412)
+//
+//#include <osg/MatrixTransform>
+//#include <osg/LightSource>
 //#include <osgDB/ReadFile>
 //#include <osgViewer/Viewer>
 //
+//osg::Node* createLightSource(unsigned int num, const osg::Vec3& trans, const osg::Vec4& color)
+//{
+//	osg::ref_ptr<osg::Light> light = new osg::Light;
+//	light->setLightNum(num);
+//	light->setDiffuse(color);
+//	light->setPosition(osg::Vec4(0.0f, 0.0f, 0.0f, 1.0f));
+//	osg::ref_ptr<osg::LightSource> lightSource = new osg::LightSource;
+//	lightSource->setLight(light);
+//	osg::ref_ptr<osg::MatrixTransform> sourceTrans = new osg::MatrixTransform;
+//	sourceTrans->setMatrix(osg::Matrix::translate(trans));
+//	sourceTrans->addChild(lightSource.get());
+//	return sourceTrans.release();
+//}
+//
 //int main(int argc, char** argv)
 //{
-//	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
-//	vertices->push_back(osg::Vec3(-0.5f, 0.0f, -0.5f));
-//	vertices->push_back(osg::Vec3(0.5f, 0.0f, -0.5f));
-//	vertices->push_back(osg::Vec3(0.5f, 0.0f, 0.5f));
-//	vertices->push_back(osg::Vec3(-0.5f, 0.0f, 0.5f));
-//	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
-//	normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
-//	osg::ref_ptr<osg::Vec2Array> texcoords = new osg::Vec2Array;
-//	texcoords->push_back(osg::Vec2(0.0f, 0.0f));
-//	texcoords->push_back(osg::Vec2(0.0f, 1.0f));
-//	texcoords->push_back(osg::Vec2(1.0f, 1.0f));
-//	texcoords->push_back(osg::Vec2(1.0f, 0.0f));
-//	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
-//	quad->setVertexArray(vertices.get());
-//	quad->setNormalArray(normals.get());
-//	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
-//	quad->setTexCoordArray(0, texcoords.get());
-//	quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
+//	osg::ref_ptr<osg::Node> model = osgDB::readNodeFile("cessna.osg");
+//	osg::ref_ptr<osg::Group> root = new osg::Group;
+//	root->addChild(model.get());
 //
-//	osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
-//	osg::ref_ptr<osg::Image> image = osgDB::readImageFile("Images/lz.rgb");
-//	texture->setImage(image.get());
+//	osg::Node* light0 = createLightSource(0, osg::Vec3(-20.0f, 0.0f, 0.0f), osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
+//	osg::Node* light1 = createLightSource(1, osg::Vec3(20.0f, 0.0f, 0.0f), osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
 //
-//	osg::ref_ptr<osg::Geode> root = new osg::Geode;
-//	root->addDrawable(quad.get());
-//	root->getOrCreateStateSet()->setTextureAttributeAndModes(0, texture.get());
+//	root->getOrCreateStateSet()->setMode(GL_LIGHT0, osg::StateAttribute::OFF);
+//	root->getOrCreateStateSet()->setMode(GL_LIGHT1, osg::StateAttribute::ON);
+//	root->addChild(light0);
+//	root->addChild(light1);
 //
 //	osgViewer::Viewer viewer;
 //	viewer.setSceneData(root.get());
 //	return viewer.run();
 //}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//page 143 (166 of 412)
+
+#include <osg/Texture2D>
+#include <osg/Geometry>
+#include <osgDB/ReadFile>
+#include <osgViewer/Viewer>
+
+int main(int argc, char** argv)
+{
+	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
+	vertices->push_back(osg::Vec3(-0.5f, 0.0f, -0.5f));
+	vertices->push_back(osg::Vec3(0.5f, 0.0f, -0.5f));
+	vertices->push_back(osg::Vec3(0.5f, 0.0f, 0.5f));
+	vertices->push_back(osg::Vec3(-0.5f, 0.0f, 0.5f));
+	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
+	normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
+	osg::ref_ptr<osg::Vec2Array> texcoords = new osg::Vec2Array;
+	texcoords->push_back(osg::Vec2(0.0f, 0.0f));
+	texcoords->push_back(osg::Vec2(0.0f, 1.0f));
+	texcoords->push_back(osg::Vec2(1.0f, 1.0f));
+	texcoords->push_back(osg::Vec2(1.0f, 0.0f));
+	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
+	quad->setVertexArray(vertices.get());
+	quad->setNormalArray(normals.get());
+	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
+	quad->setTexCoordArray(0, texcoords.get());
+	quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
+
+	osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
+	osg::ref_ptr<osg::Image> image = osgDB::readImageFile("Images/lz.rgb");
+	int width = image->s();
+	int height = image->t();
+	int depth = image->r();
+	unsigned char* imageData = image->data();
+	std::vector<unsigned char> vecData;
+	int counter = 0;
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			char currentChar = imageData[counter];
+			counter++;
+			vecData.push_back(currentChar);
+		}
+	}
+	texture->setImage(image.get());
+
+	osg::ref_ptr<osg::Geode> root = new osg::Geode;
+	root->addDrawable(quad.get());
+	root->getOrCreateStateSet()->setTextureAttributeAndModes(0, texture.get());
+
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(root.get());
+	return viewer.run();
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //page 148
