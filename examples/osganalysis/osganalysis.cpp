@@ -1,22 +1,42 @@
-#include <vector>
+#include <osg/Geode>
+#include <osg/ShapeDrawable>
+#include <osg/StateSet>
+#include <osgViewer/Viewer>
 
-using namespace std;
+int main(int argc, char** argv)
+{
+	// Create a root node to hold the scene
+	osg::ref_ptr<osg::Group> root = new osg::Group();
 
-////page 47 (70 of 412)
-//#include <osgDB/ReadFile>
-//#include <osgViewer/Viewer>
-//
-//int main(int argc, char** argv)
-//{
-//	osg::ref_ptr<osg::Node> root = osgDB::readNodeFile("cessna.osg");	
-//	osgViewer::Viewer viewer;
-//	if (root.valid() == true)
-//	{
-//		osg::Node* rootPointer = root.get();
-//		viewer.setSceneData(rootPointer);
-//	}
-//	return viewer.run();
-//}
+	// Create a sphere shape
+	osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere(osg::Vec3(0.0f, 0.0f, 0.0f), 1.0f);
+
+	// Create a drawable from the sphere shape
+	osg::ref_ptr<osg::ShapeDrawable> sphereDrawable = new osg::ShapeDrawable(sphere.get());
+
+	// Create a geode to hold the sphere drawable
+	osg::ref_ptr<osg::Geode> sphereGeode = new osg::Geode();
+	sphereGeode->addDrawable(sphereDrawable.get());
+
+	// Create a state set for the sphere
+	osg::ref_ptr<osg::StateSet> sphereStateSet = new osg::StateSet();
+
+	// Enable blending and set the alpha value of the sphere
+	sphereStateSet->setMode(GL_BLEND, osg::StateAttribute::ON);
+	sphereStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
+	//sphereStateSet->setAlpha(osg::StateAttribute::OVERRIDE, 0.5);
+
+	// Apply the state set to the sphere geode
+	sphereGeode->setStateSet(sphereStateSet.get());
+
+	// Add the sphere geode to the root node
+	root->addChild(sphereGeode.get());
+
+	// Create a viewer to render the scene
+	osgViewer::Viewer viewer;
+	viewer.setSceneData(root.get());
+	return viewer.run();
+}
 
 
 
@@ -1145,61 +1165,61 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //page 158 (geometry shader - generating a Bezier curve)
 
-#include <osg/Program>
-#include <osg/LineWidth>
-#include <osgDB/ReadFile>
-#include <osgViewer/Viewer>
-
-int main(int argc, char** argv)
-{
-	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
-	vertices->push_back(osg::Vec3(0.0f, 0.0f, 0.0f));
-	vertices->push_back(osg::Vec3(0.0f, 0.0f, 1.0f));
-	vertices->push_back(osg::Vec3(1.0f, 0.0f, 1.0f));
-	vertices->push_back(osg::Vec3(1.0f, 0.0f, 0.0f));
-	osg::ref_ptr<osg::Geometry> controlPoints = new osg::Geometry;
-	controlPoints->setVertexArray(vertices.get());
-	controlPoints->addPrimitiveSet(new osg::DrawArrays(GL_LINES_ADJACENCY_EXT, 0, 4));
-	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
-	geode->addDrawable(controlPoints.get());
-	int segments = 3;
-	osg::ref_ptr<osg::Program> program = new osg::Program;
-
-	std::string shaderFolder = "D:/Developments/OSG_folders/OpenSceneGraph/examples/osganalysis";
-	//std::string shaderFolder = ".";
-	std::string vertexShaderPath = shaderFolder + "/" + "shader.vert";
-	std::string geometryShaderPath = shaderFolder + "/" + "shader.geom";
-
-	osg::ref_ptr<osg::Shader> vertexShader = new osg::Shader(osg::Shader::VERTEX);
-	vertexShader->loadShaderSourceFromFile(vertexShaderPath);
-	program->addShader(vertexShader);
-
-	osg::ref_ptr<osg::Shader> geomShader = new osg::Shader(osg::Shader::GEOMETRY);
-	geomShader->loadShaderSourceFromFile(geometryShaderPath);
-	program->addShader(geomShader);
-
-	//program->addShader(new osg::Shader(osg::Shader::VERTEX, vertSource));
-	//program->addShader(new osg::Shader(osg::Shader::GEOMETRY, geomSource));
-
-
-
-	program->setParameter(GL_GEOMETRY_VERTICES_OUT_EXT, segments + 1);
-	program->setParameter(GL_GEOMETRY_INPUT_TYPE_EXT, GL_LINES_ADJACENCY_EXT);
-	program->setParameter(GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_LINE_STRIP);
-
-	osg::ref_ptr<osg::LineWidth> lineWidth = new osg::LineWidth;
-	lineWidth->setWidth(7.0f);
-
-	osg::StateSet* stateset = geode->getOrCreateStateSet();
-	stateset->setAttributeAndModes(program.get());
-	stateset->setAttribute(lineWidth.get());
-	stateset->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
-	stateset->addUniform(new osg::Uniform("segments", segments));
-
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(geode.get());
-	return viewer.run();
-}
+//#include <osg/Program>
+//#include <osg/LineWidth>
+//#include <osgDB/ReadFile>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
+//	vertices->push_back(osg::Vec3(0.0f, 0.0f, 0.0f));
+//	vertices->push_back(osg::Vec3(0.0f, 0.0f, 1.0f));
+//	vertices->push_back(osg::Vec3(1.0f, 0.0f, 1.0f));
+//	vertices->push_back(osg::Vec3(1.0f, 0.0f, 0.0f));
+//	osg::ref_ptr<osg::Geometry> controlPoints = new osg::Geometry;
+//	controlPoints->setVertexArray(vertices.get());
+//	controlPoints->addPrimitiveSet(new osg::DrawArrays(GL_LINES_ADJACENCY_EXT, 0, 4));
+//	osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+//	geode->addDrawable(controlPoints.get());
+//	int segments = 3;
+//	osg::ref_ptr<osg::Program> program = new osg::Program;
+//
+//	std::string shaderFolder = "D:/Developments/OSG_folders/OpenSceneGraph/examples/osganalysis";
+//	//std::string shaderFolder = ".";
+//	std::string vertexShaderPath = shaderFolder + "/" + "shader.vert";
+//	std::string geometryShaderPath = shaderFolder + "/" + "shader.geom";
+//
+//	osg::ref_ptr<osg::Shader> vertexShader = new osg::Shader(osg::Shader::VERTEX);
+//	vertexShader->loadShaderSourceFromFile(vertexShaderPath);
+//	program->addShader(vertexShader);
+//
+//	osg::ref_ptr<osg::Shader> geomShader = new osg::Shader(osg::Shader::GEOMETRY);
+//	geomShader->loadShaderSourceFromFile(geometryShaderPath);
+//	program->addShader(geomShader);
+//
+//	//program->addShader(new osg::Shader(osg::Shader::VERTEX, vertSource));
+//	//program->addShader(new osg::Shader(osg::Shader::GEOMETRY, geomSource));
+//
+//
+//
+//	program->setParameter(GL_GEOMETRY_VERTICES_OUT_EXT, segments + 1);
+//	program->setParameter(GL_GEOMETRY_INPUT_TYPE_EXT, GL_LINES_ADJACENCY_EXT);
+//	program->setParameter(GL_GEOMETRY_OUTPUT_TYPE_EXT, GL_LINE_STRIP);
+//
+//	osg::ref_ptr<osg::LineWidth> lineWidth = new osg::LineWidth;
+//	lineWidth->setWidth(7.0f);
+//
+//	osg::StateSet* stateset = geode->getOrCreateStateSet();
+//	stateset->setAttributeAndModes(program.get());
+//	stateset->setAttribute(lineWidth.get());
+//	stateset->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+//	stateset->addUniform(new osg::Uniform("segments", segments));
+//
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(geode.get());
+//	return viewer.run();
+//}
 
 
 
