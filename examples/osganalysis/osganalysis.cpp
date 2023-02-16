@@ -1,42 +1,42 @@
-#include <osg/Geode>
-#include <osg/ShapeDrawable>
-#include <osg/StateSet>
-#include <osgViewer/Viewer>
-
-int main(int argc, char** argv)
-{
-	// Create a root node to hold the scene
-	osg::ref_ptr<osg::Group> root = new osg::Group();
-
-	// Create a sphere shape
-	osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere(osg::Vec3(0.0f, 0.0f, 0.0f), 1.0f);
-
-	// Create a drawable from the sphere shape
-	osg::ref_ptr<osg::ShapeDrawable> sphereDrawable = new osg::ShapeDrawable(sphere.get());
-
-	// Create a geode to hold the sphere drawable
-	osg::ref_ptr<osg::Geode> sphereGeode = new osg::Geode();
-	sphereGeode->addDrawable(sphereDrawable.get());
-
-	// Create a state set for the sphere
-	osg::ref_ptr<osg::StateSet> sphereStateSet = new osg::StateSet();
-
-	// Enable blending and set the alpha value of the sphere
-	sphereStateSet->setMode(GL_BLEND, osg::StateAttribute::ON);
-	sphereStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
-	//sphereStateSet->setAlpha(osg::StateAttribute::OVERRIDE, 0.5);
-
-	// Apply the state set to the sphere geode
-	sphereGeode->setStateSet(sphereStateSet.get());
-
-	// Add the sphere geode to the root node
-	root->addChild(sphereGeode.get());
-
-	// Create a viewer to render the scene
-	osgViewer::Viewer viewer;
-	viewer.setSceneData(root.get());
-	return viewer.run();
-}
+//#include <osg/Geode>
+//#include <osg/ShapeDrawable>
+//#include <osg/StateSet>
+//#include <osgViewer/Viewer>
+//
+//int main(int argc, char** argv)
+//{
+//	// Create a root node to hold the scene
+//	osg::ref_ptr<osg::Group> root = new osg::Group();
+//
+//	// Create a sphere shape
+//	osg::ref_ptr<osg::Sphere> sphere = new osg::Sphere(osg::Vec3(0.0f, 0.0f, 0.0f), 1.0f);
+//
+//	// Create a drawable from the sphere shape
+//	osg::ref_ptr<osg::ShapeDrawable> sphereDrawable = new osg::ShapeDrawable(sphere.get());
+//
+//	// Create a geode to hold the sphere drawable
+//	osg::ref_ptr<osg::Geode> sphereGeode = new osg::Geode();
+//	sphereGeode->addDrawable(sphereDrawable.get());
+//
+//	// Create a state set for the sphere
+//	osg::ref_ptr<osg::StateSet> sphereStateSet = new osg::StateSet();
+//
+//	// Enable blending and set the alpha value of the sphere
+//	sphereStateSet->setMode(GL_BLEND, osg::StateAttribute::ON);
+//	sphereStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
+//	//sphereStateSet->setAlpha(osg::StateAttribute::OVERRIDE, 0.5);
+//
+//	// Apply the state set to the sphere geode
+//	sphereGeode->setStateSet(sphereStateSet.get());
+//
+//	// Add the sphere geode to the root node
+//	root->addChild(sphereGeode.get());
+//
+//	// Create a viewer to render the scene
+//	osgViewer::Viewer viewer;
+//	viewer.setSceneData(root.get());
+//	return viewer.run();
+//}
 
 
 
@@ -2132,3 +2132,78 @@ int main(int argc, char** argv)
 //
 //    return 0;
 //}
+
+
+#include <osg/CopyOp>
+#include <osg/Object>
+#include <osg/Matrixd>
+#include <osg/NodeVisitor>
+#include <osg/MatrixTransform>
+#include <osg/ref_ptr>
+#include <osgDB/ReadFile>
+#include <osgGA/TrackballManipulator>
+#include <osgViewer/View>
+#include <osgViewer/Viewer>
+#include <osgViewer/config/singleWindow>
+#include "windows.h"
+#include "timeapi.h"
+
+#define NUM_ELEMENTS 1024
+
+int main()
+{
+	osgViewer::Viewer viewer;
+	viewer.apply(new osgViewer::SingleWindow(200, 200, 800, 800));
+	viewer.init();
+
+	osg::ref_ptr<osg::Group> truck_collection = new osg::Group;
+	osg::ref_ptr<osg::Node> truck_model = osgDB::readNodeFile("dumptruck.osg");
+
+	constexpr int grid_width = 32;
+	constexpr int grid_height = 32;
+	osg::ref_ptr<osg::MatrixTransform> all_truck_transforms[NUM_ELEMENTS];
+
+	for (int i = 0; i < grid_height; ++i) {
+		for (int j = 0; j < grid_width; ++j) {
+			osg::ref_ptr<osg::MatrixTransform> truck_transform = new osg::MatrixTransform;
+			truck_transform->addChild(static_cast<osg::Node*>(truck_model->clone(osg::CopyOp::SHALLOW_COPY)));
+			all_truck_transforms[i * grid_height + j] = truck_transform;
+			truck_collection->addChild(truck_transform);
+		}
+	}
+
+	osg::ref_ptr<osg::MatrixTransform> root = new osg::MatrixTransform;
+	root->addChild(truck_collection);
+
+	osg::ref_ptr<osgGA::TrackballManipulator> manipulator = new osgGA::TrackballManipulator;
+	manipulator->setHomePosition(osg::Vec3d(0, 0, 1000), osg::Vec3d(0, 0, 0), osg::Vec3d(0, 1, 0));
+
+	viewer.setCameraManipulator(manipulator);
+	viewer.setSceneData(root);
+	int loop_counter = 0;
+
+	LARGE_INTEGER end, start, freq;
+
+	float temp;
+	QueryPerformanceFrequency(&freq);
+
+	while (true) {
+		for (int i = 0; i < grid_height; ++i) {
+			for (int j = 0; j < grid_width; ++j) {
+				all_truck_transforms[i * grid_height + j]->asMatrixTransform()->setMatrix(
+					osg::Matrixd::translate(osg::Vec3(-80 + 5.0 * i, -80 + 5.0 * j, 600)) *
+					osg::Matrixd::rotate(osg::inDegrees(5.0f*loop_counter), -80 + 5.0 * i, -80 + 5.0 * j, 600.0));
+			}
+		}
+		QueryPerformanceCounter(&start);
+		viewer.frame();
+		QueryPerformanceCounter(&end);
+		temp = ((float)(end.QuadPart - start.QuadPart) / ((float)(freq.QuadPart)));
+		printf("Time taken to draw all moving objects is %.10f seconds\n", temp);
+
+		++loop_counter;
+	}
+
+	return 0;
+}
+
