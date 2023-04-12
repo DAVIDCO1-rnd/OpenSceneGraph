@@ -14,7 +14,7 @@ IF(NOT ANDROID)
 ENDIF()
 
 # User Options
-OPTION(DYNAMIC_OPENTHREADS "Set to ON to build OpenThreads for dynamic linking.  Use OFF for static." OFF)
+OPTION(DYNAMIC_OPENTHREADS "Set to ON to build OpenThreads for dynamic linking.  Use OFF for static." ON)
 IF(DYNAMIC_OPENTHREADS)
     SET(OPENTHREADS_USER_DEFINED_DYNAMIC_OR_STATIC "SHARED")
 ELSE()
