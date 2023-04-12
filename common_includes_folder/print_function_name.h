@@ -1,3 +1,5 @@
+#ifndef OSG_PRINT_FUNCTION_NAME
+#define OSG_PRINT_FUNCTION_NAME
 #include <iostream>
 
 #define PRINT_FUNCTION_NAME EntryRaiiObject obj(__FUNCTION__);
@@ -13,3 +15,4 @@ struct EntryRaiiObject {
 	}
 	const char *function_name;
 };
+#endif
