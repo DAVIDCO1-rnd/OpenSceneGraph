@@ -2,7 +2,7 @@
 #define OSG_PRINT_FUNCTION_NAME
 #include <iostream>
 
-#define PRINT_FUNCTION_NAME EntryRaiiObject obj(__FUNCTION__);
+#define PRINT_FUNCTION_NAME EntryRaiiObject print_details_at_the_beginning_of_function(__FUNCTION__);
 
 struct EntryRaiiObject {
 	EntryRaiiObject(const char *f) : function_name(f)
