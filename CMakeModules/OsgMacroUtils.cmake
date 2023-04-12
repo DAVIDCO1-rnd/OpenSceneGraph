@@ -211,6 +211,8 @@ ENDMACRO(SET_OUTPUT_DIR_PROPERTY_260 TARGET_TARGETNAME RELATIVE_OUTDIR)
 ##########################################################################################################
 
 MACRO(SETUP_LIBRARY LIB_NAME)
+    set(common_includes_folder ${PROJECT_SOURCE_DIR}/common_includes_folder)
+    file(GLOB COMMON_INCLUDE_FILES "${common_includes_folder}/*.h")
     IF(GLCORE_FOUND)
         INCLUDE_DIRECTORIES( ${GLCORE_INCLUDE_DIR} )
     ENDIF()
@@ -219,10 +221,12 @@ MACRO(SETUP_LIBRARY LIB_NAME)
         SET(TARGET_TARGETNAME ${LIB_NAME} )
         ADD_LIBRARY(${LIB_NAME}
             ${OPENSCENEGRAPH_USER_DEFINED_DYNAMIC_OR_STATIC}
+            ${COMMON_INCLUDE_FILES}
             ${TARGET_H}
             ${TARGET_H_NO_MODULE_INSTALL}
             ${TARGET_SRC}
         )
+        target_include_directories(${LIB_NAME} PUBLIC ${common_includes_folder})
         SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES FOLDER "OSG Core")
         IF(APPLE)
             IF(OSG_BUILD_PLATFORM_IPHONE)

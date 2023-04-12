@@ -10,9 +10,12 @@ ENDIF(NOT OSG_DETERMINE_WIN_VERSION)
 SOURCE_GROUP("Header Files" FILES ${LIB_PUBLIC_HEADERS})
 SET_SOURCE_FILES_PROPERTIES(${LIB_PUBLIC_HEADERS} PROPERTIES HEADER_FILE_ONLY ON)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Gh /GH")
+set(common_includes_folder ${PROJECT_SOURCE_DIR}/common_includes_folder)
+file(GLOB COMMON_INCLUDE_FILES "${common_includes_folder}/*.h")
 ADD_LIBRARY(${LIB_NAME}
     ${OPENTHREADS_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${LIB_PUBLIC_HEADERS}
+    ${COMMON_INCLUDE_FILES}
     HandleHolder.h
     Win32BarrierPrivateData.h
     WIN32Condition.cpp
@@ -26,6 +29,7 @@ ADD_LIBRARY(${LIB_NAME}
     ../common/Atomic.cpp
     ${OPENTHREADS_VERSIONINFO_RC}
 )
+target_include_directories(${LIB_NAME} PUBLIC ${common_includes_folder})
 
 SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES FOLDER "OSG Core")
 IF(OPENTHREADS_SONAMES)
