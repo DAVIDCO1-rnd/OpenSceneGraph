@@ -37,6 +37,8 @@
 
 #include <stdlib.h>
 
+#include "print_function_name.h"
+
 #if defined(__sgi)
     #include <ctype.h>
 #elif defined(__GNUC__) || !defined(WIN32) || defined(__MWERKS__)
@@ -83,6 +85,7 @@ public:
 
     void operator ++()
     {
+		PRINT_FUNCTION_NAME
         _rwUsed.insert(get());
     }
 
@@ -98,6 +101,7 @@ protected:
 
     ReaderWriter* get()
     {
+		PRINT_FUNCTION_NAME
         OpenThreads::ScopedLock<OpenThreads::ReentrantMutex> lock(_pluginMutex);
         Registry::ReaderWriterList::iterator itr=_rwList.begin();
         for(;itr!=_rwList.end();++itr)
@@ -127,6 +131,7 @@ public:
 
     void operator ++()
     {
+		PRINT_FUNCTION_NAME
         _archivesUsed.insert(get());
     }
 
@@ -142,6 +147,7 @@ protected:
 
     Archive* get()
     {
+		PRINT_FUNCTION_NAME
         OpenThreads::ScopedLock<OpenThreads::ReentrantMutex> lock(_mutex);
         Registry::ArchiveCache::iterator itr=_archives.begin();
         for(;itr!=_archives.end();++itr)
@@ -195,6 +201,7 @@ protected:
 
 void PrintFilePathList(std::ostream& stream,const FilePathList& filepath)
 {
+	PRINT_FUNCTION_NAME
     for(FilePathList::const_iterator itr=filepath.begin();
         itr!=filepath.end();
         ++itr)
@@ -205,6 +212,7 @@ void PrintFilePathList(std::ostream& stream,const FilePathList& filepath)
 
 Registry* Registry::instance(bool erase)
 {
+	PRINT_FUNCTION_NAME
     static ref_ptr<Registry> s_registry = new Registry;
     if (erase)
     {
@@ -220,6 +228,7 @@ OSG_INIT_SINGLETON_PROXY(ProxyInitRegistry, Registry::instance())
 // definition of the Registry
 Registry::Registry()
 {
+	PRINT_FUNCTION_NAME
     // comment out because it was causing problems under OSX - causing it to crash osgconv when constructing ostream in osg::notify().
     // OSG_INFO << "Constructing osg::Registry"<<std::endl;
 
@@ -483,11 +492,13 @@ Registry::Registry()
 
 Registry::~Registry()
 {
+	PRINT_FUNCTION_NAME
     destruct();
 }
 
 void Registry::destruct()
 {
+	PRINT_FUNCTION_NAME
     // OSG_NOTICE<<"Registry::destruct()"<<std::endl;
 
     // clean up the SharedStateManager
@@ -518,6 +529,7 @@ void Registry::destruct()
 
 void Registry::initDataFilePathList()
 {
+	PRINT_FUNCTION_NAME
     FilePathList filepath;
     //
     // set up data file paths
@@ -541,17 +553,18 @@ void Registry::initDataFilePathList()
 }
 
 void Registry::setDataFilePathList(const std::string& paths)
-{
+{ PRINT_FUNCTION_NAME
     _dataFilePath.clear();
     convertStringPathIntoFilePathList(paths,_dataFilePath);
 }
 
-void Registry::setLibraryFilePathList(const std::string& paths) { _libraryFilePath.clear(); convertStringPathIntoFilePathList(paths,_libraryFilePath); }
+void Registry::setLibraryFilePathList(const std::string& paths) { PRINT_FUNCTION_NAME _libraryFilePath.clear(); convertStringPathIntoFilePathList(paths,_libraryFilePath); }
 
 
 
 void Registry::initLibraryFilePathList()
 {
+	PRINT_FUNCTION_NAME
     //
     // set up library paths
     //
@@ -574,6 +587,7 @@ void Registry::initLibraryFilePathList()
 
 void Registry::readCommandLine(osg::ArgumentParser& arguments)
 {
+	PRINT_FUNCTION_NAME
     // report the usage options.
     if (arguments.getApplicationUsage())
     {
@@ -608,6 +622,7 @@ void Registry::readCommandLine(osg::ArgumentParser& arguments)
 
 void Registry::addReaderWriter(ReaderWriter* rw)
 {
+	PRINT_FUNCTION_NAME
     if (rw==0L) return;
 
     // OSG_NOTIFY(INFO) << "osg::Registry::addReaderWriter("<<rw->className()<<")"<< std::endl;
@@ -621,6 +636,7 @@ void Registry::addReaderWriter(ReaderWriter* rw)
 
 void Registry::removeReaderWriter(ReaderWriter* rw)
 {
+	PRINT_FUNCTION_NAME
     if (rw==0L) return;
 
 //    OSG_NOTIFY(INFO) << "osg::Registry::removeReaderWriter();"<< std::endl;
@@ -637,6 +653,7 @@ void Registry::removeReaderWriter(ReaderWriter* rw)
 
 ImageProcessor* Registry::getImageProcessor()
 {
+	PRINT_FUNCTION_NAME
     {
         OpenThreads::ScopedLock<OpenThreads::ReentrantMutex> lock(_pluginMutex);
         if (!_ipList.empty())
@@ -649,6 +666,7 @@ ImageProcessor* Registry::getImageProcessor()
 
 ImageProcessor* Registry::getImageProcessorForExtension(const std::string& ext)
 {
+	PRINT_FUNCTION_NAME
     {
         OpenThreads::ScopedLock<OpenThreads::ReentrantMutex> lock(_pluginMutex);
         if (!_ipList.empty())
@@ -673,6 +691,7 @@ ImageProcessor* Registry::getImageProcessorForExtension(const std::string& ext)
 
 void Registry::addImageProcessor(ImageProcessor* ip)
 {
+	PRINT_FUNCTION_NAME
     if (ip==0L) return;
 
     OSG_NOTIFY(NOTICE) << "osg::Registry::addImageProcessor("<<ip->className()<<")"<< std::endl;
@@ -686,6 +705,7 @@ void Registry::addImageProcessor(ImageProcessor* ip)
 
 void Registry::removeImageProcessor(ImageProcessor* ip)
 {
+	PRINT_FUNCTION_NAME
     if (ip==0L) return;
 
     OSG_NOTIFY(NOTICE) << "osg::Registry::removeImageProcessor();"<< std::endl;
@@ -703,16 +723,19 @@ void Registry::removeImageProcessor(ImageProcessor* ip)
 
 void Registry::addFileExtensionAlias(const std::string mapExt, const std::string toExt)
 {
+	PRINT_FUNCTION_NAME
     _extAliasMap[mapExt] = toExt;
 }
 
 void Registry::addMimeTypeExtensionMapping(const std::string fromMimeType, const std::string toExt)
 {
+	PRINT_FUNCTION_NAME
     _mimeTypeExtMap[fromMimeType] = toExt;
 }
 
 bool Registry::readPluginAliasConfigurationFile( const std::string& file )
 {
+	PRINT_FUNCTION_NAME
     std::string fileName = osgDB::findDataFile( file );
     if (fileName.empty())
     {
@@ -755,6 +778,7 @@ bool Registry::readPluginAliasConfigurationFile( const std::string& file )
 
 std::string Registry::trim( const std::string& str )
 {
+	PRINT_FUNCTION_NAME
     if (!str.size()) return str;
     std::string::size_type first = str.find_first_not_of( " \t" );
     std::string::size_type last = str.find_last_not_of( "  \t\r\n" );
@@ -765,11 +789,13 @@ std::string Registry::trim( const std::string& str )
 
 std::string Registry::createLibraryNameForFile(const std::string& fileName)
 {
+	PRINT_FUNCTION_NAME
     return createLibraryNameForExtension(getFileExtension(fileName));
 }
 
 std::string Registry::createLibraryNameForExtension(const std::string& ext)
 {
+	PRINT_FUNCTION_NAME
     std::string lowercase_ext;
     for(std::string::const_iterator sitr=ext.begin();
         sitr!=ext.end();
@@ -799,6 +825,7 @@ std::string Registry::createLibraryNameForExtension(const std::string& ext)
 
 std::string Registry::createLibraryNameForNodeKit(const std::string& name)
 {
+	PRINT_FUNCTION_NAME
 #if defined(__CYGWIN__)
     return "cyg"+name+OSG_LIBRARY_POSTFIX_WITH_QUOTES+".dll";
 #elif defined(__MINGW32__)
@@ -814,6 +841,7 @@ std::string Registry::createLibraryNameForNodeKit(const std::string& name)
 
 Registry::LoadStatus Registry::loadLibrary(const std::string& fileName)
 {
+	PRINT_FUNCTION_NAME
     OpenThreads::ScopedLock<OpenThreads::ReentrantMutex> lock(_pluginMutex);
 
     DynamicLibraryList::iterator ditr = getLibraryItr(fileName);
@@ -835,6 +863,7 @@ Registry::LoadStatus Registry::loadLibrary(const std::string& fileName)
 
 bool Registry::closeLibrary(const std::string& fileName)
 {
+	PRINT_FUNCTION_NAME
     OpenThreads::ScopedLock<OpenThreads::ReentrantMutex> lock(_pluginMutex);
     DynamicLibraryList::iterator ditr = getLibraryItr(fileName);
     if (ditr!=_dlList.end())
@@ -847,6 +876,7 @@ bool Registry::closeLibrary(const std::string& fileName)
 
 void Registry::closeAllLibraries()
 {
+	PRINT_FUNCTION_NAME
     // OSG_NOTICE<<"Registry::closeAllLibraries()"<<std::endl;
     OpenThreads::ScopedLock<OpenThreads::ReentrantMutex> lock(_pluginMutex);
     _dlList.clear();
@@ -854,6 +884,7 @@ void Registry::closeAllLibraries()
 
 Registry::DynamicLibraryList::iterator Registry::getLibraryItr(const std::string& fileName)
 {
+	PRINT_FUNCTION_NAME
     DynamicLibraryList::iterator ditr = _dlList.begin();
     for(;ditr!=_dlList.end();++ditr)
     {
@@ -864,6 +895,7 @@ Registry::DynamicLibraryList::iterator Registry::getLibraryItr(const std::string
 
 DynamicLibrary* Registry::getLibrary(const std::string& fileName)
 {
+	PRINT_FUNCTION_NAME
     OpenThreads::ScopedLock<OpenThreads::ReentrantMutex> lock(_pluginMutex);
     DynamicLibraryList::iterator ditr = getLibraryItr(fileName);
     if (ditr!=_dlList.end()) return ditr->get();
@@ -872,6 +904,7 @@ DynamicLibrary* Registry::getLibrary(const std::string& fileName)
 
 ReaderWriter* Registry::getReaderWriterForExtension(const std::string& ext)
 {
+	PRINT_FUNCTION_NAME
     // record the existing reader writer.
     std::set<ReaderWriter*> rwOriginal;
 
@@ -908,6 +941,7 @@ ReaderWriter* Registry::getReaderWriterForExtension(const std::string& ext)
 
 ReaderWriter* Registry::getReaderWriterForMimeType(const std::string& mimeType)
 {
+	PRINT_FUNCTION_NAME
     MimeTypeExtensionMap::const_iterator i = _mimeTypeExtMap.find( mimeType );
     return i != _mimeTypeExtMap.end()?
         getReaderWriterForExtension( i->second ) :
@@ -1015,6 +1049,7 @@ struct Registry::ReadScriptFunctor : public Registry::ReadFunctor
 
 void Registry::addArchiveExtension(const std::string ext)
 {
+	PRINT_FUNCTION_NAME
     for(ArchiveExtensionList::iterator aitr=_archiveExtList.begin();
         aitr!=_archiveExtList.end();
         ++aitr)
@@ -1027,6 +1062,7 @@ void Registry::addArchiveExtension(const std::string ext)
 
 std::string Registry::findDataFileImplementation(const std::string& filename, const Options* options, CaseSensitivity caseSensitivity)
 {
+	PRINT_FUNCTION_NAME
     if (filename.empty()) return filename;
 
     // if data file contains a server address then we can't find it in local directories so return empty string.
@@ -1108,6 +1144,7 @@ std::string Registry::findDataFileImplementation(const std::string& filename, co
 
 std::string Registry::findLibraryFileImplementation(const std::string& filename, const Options* /*options*/, CaseSensitivity caseSensitivity)
 {
+	PRINT_FUNCTION_NAME
     if (filename.empty())
         return filename;
 
@@ -1140,6 +1177,7 @@ std::string Registry::findLibraryFileImplementation(const std::string& filename,
 
 ReaderWriter::ReadResult Registry::read(const ReadFunctor& readFunctor)
 {
+	PRINT_FUNCTION_NAME
     for(ArchiveExtensionList::iterator aitr=_archiveExtList.begin();
         aitr!=_archiveExtList.end();
         ++aitr)
@@ -1256,6 +1294,7 @@ ReaderWriter::ReadResult Registry::read(const ReadFunctor& readFunctor)
 
 ReaderWriter::ReadResult Registry::readImplementation(const ReadFunctor& readFunctor,Options::CacheHintOptions cacheHint)
 {
+	PRINT_FUNCTION_NAME
     std::string file(readFunctor._filename);
 
     bool useObjectCache = false;
@@ -1317,6 +1356,7 @@ ReaderWriter::ReadResult Registry::readImplementation(const ReadFunctor& readFun
 
 ReaderWriter::ReadResult Registry::openArchiveImplementation(const std::string& fileName, ReaderWriter::ArchiveStatus status, unsigned int indexBlockSizeHint, const Options* options)
 {
+	PRINT_FUNCTION_NAME
     osg::ref_ptr<osgDB::Archive> archive = getRefFromArchiveCache(fileName);
     if (archive.valid()) return archive.get();
 
@@ -1335,11 +1375,13 @@ ReaderWriter::ReadResult Registry::openArchiveImplementation(const std::string& 
 
 ReaderWriter::ReadResult Registry::readObjectImplementation(const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     return readImplementation(ReadObjectFunctor(fileName, options),Options::CACHE_OBJECTS);
 }
 
 ReaderWriter::WriteResult Registry::writeObjectImplementation(const Object& obj,const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     // record the errors reported by readerwriters.
     typedef std::vector<ReaderWriter::WriteResult> Results;
     Results results;
@@ -1381,11 +1423,13 @@ ReaderWriter::WriteResult Registry::writeObjectImplementation(const Object& obj,
 
 ReaderWriter::ReadResult Registry::readImageImplementation(const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     return readImplementation(ReadImageFunctor(fileName, options),Options::CACHE_IMAGES);
 }
 
 ReaderWriter::WriteResult Registry::writeImageImplementation(const Image& image,const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     // record the errors reported by readerwriters.
     typedef std::vector<ReaderWriter::WriteResult> Results;
     Results results;
@@ -1426,11 +1470,13 @@ ReaderWriter::WriteResult Registry::writeImageImplementation(const Image& image,
 
 ReaderWriter::ReadResult Registry::readHeightFieldImplementation(const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     return readImplementation(ReadHeightFieldFunctor(fileName, options),Options::CACHE_HEIGHTFIELDS);
 }
 
 ReaderWriter::WriteResult Registry::writeHeightFieldImplementation(const HeightField& HeightField,const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     // record the errors reported by readerwriters.
     typedef std::vector<ReaderWriter::WriteResult> Results;
     Results results;
@@ -1471,6 +1517,7 @@ ReaderWriter::WriteResult Registry::writeHeightFieldImplementation(const HeightF
 
 ReaderWriter::ReadResult Registry::readNodeImplementation(const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
 #if 0
 
     osg::Timer_t startTick = osg::Timer::instance()->tick();
@@ -1488,6 +1535,7 @@ ReaderWriter::ReadResult Registry::readNodeImplementation(const std::string& fil
 
 ReaderWriter::WriteResult Registry::writeNodeImplementation(const Node& node,const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     // record the errors reported by readerwriters.
     typedef std::vector<ReaderWriter::WriteResult> Results;
     Results results;
@@ -1529,11 +1577,13 @@ ReaderWriter::WriteResult Registry::writeNodeImplementation(const Node& node,con
 
 ReaderWriter::ReadResult Registry::readShaderImplementation(const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     return readImplementation(ReadShaderFunctor(fileName, options),Options::CACHE_SHADERS);
 }
 
 ReaderWriter::WriteResult Registry::writeShaderImplementation(const Shader& shader,const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     // record the errors reported by readerwriters.
     typedef std::vector<ReaderWriter::WriteResult> Results;
     Results results;
@@ -1576,11 +1626,13 @@ ReaderWriter::WriteResult Registry::writeShaderImplementation(const Shader& shad
 
 ReaderWriter::ReadResult Registry::readScriptImplementation(const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     return readImplementation(ReadScriptFunctor(fileName, options),Options::CACHE_IMAGES);
 }
 
 ReaderWriter::WriteResult Registry::writeScriptImplementation(const Script& image,const std::string& fileName,const Options* options)
 {
+	PRINT_FUNCTION_NAME
     // record the errors reported by readerwriters.
     typedef std::vector<ReaderWriter::WriteResult> Results;
     Results results;
@@ -1620,42 +1672,50 @@ ReaderWriter::WriteResult Registry::writeScriptImplementation(const Script& imag
 
 void Registry::addEntryToObjectCache(const std::string& filename, osg::Object* object, double timestamp, Options *options)
 {
+	PRINT_FUNCTION_NAME
     if (_objectCache.valid()) _objectCache->addEntryToObjectCache(filename, object, timestamp, options);
 }
 
 osg::Object* Registry::getFromObjectCache(const std::string& filename, Options *options)
 {
+	PRINT_FUNCTION_NAME
     return _objectCache.valid() ? _objectCache->getFromObjectCache(filename, options) : 0;
 }
 
 osg::ref_ptr<osg::Object> Registry::getRefFromObjectCache(const std::string& filename, Options *options)
 {
+	PRINT_FUNCTION_NAME
     return _objectCache.valid() ? _objectCache->getRefFromObjectCache(filename, options) : 0;
 }
 
 void Registry::updateTimeStampOfObjectsInCacheWithExternalReferences(const osg::FrameStamp& frameStamp)
 {
+	PRINT_FUNCTION_NAME
     if (_objectCache.valid()) _objectCache->updateTimeStampOfObjectsInCacheWithExternalReferences(frameStamp.getReferenceTime());
 }
 
 void Registry::removeExpiredObjectsInCache(const osg::FrameStamp& frameStamp)
 {
+	PRINT_FUNCTION_NAME
     double expiryTime = frameStamp.getReferenceTime() - _expiryDelay;
     if (_objectCache.valid()) _objectCache->removeExpiredObjectsInCache(expiryTime);
 }
 
 void Registry::removeFromObjectCache(const std::string& filename, Options *options)
 {
+	PRINT_FUNCTION_NAME
     if (_objectCache.valid()) _objectCache->removeFromObjectCache(filename, options);
 }
 
 void Registry::clearObjectCache()
 {
+	PRINT_FUNCTION_NAME
     if (_objectCache.valid()) _objectCache->clear();
 }
 
 void Registry::addToArchiveCache(const std::string& fileName, osgDB::Archive* archive)
 {
+	PRINT_FUNCTION_NAME
     OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_archiveCacheMutex);
     _archiveCache[fileName] = archive;
 }
@@ -1663,6 +1723,7 @@ void Registry::addToArchiveCache(const std::string& fileName, osgDB::Archive* ar
 /** Remove archive from cache.*/
 void Registry::removeFromArchiveCache(const std::string& fileName)
 {
+	PRINT_FUNCTION_NAME
     OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_archiveCacheMutex);
     ArchiveCache::iterator itr = _archiveCache.find(fileName);
     if (itr!=_archiveCache.end())
@@ -1673,6 +1734,7 @@ void Registry::removeFromArchiveCache(const std::string& fileName)
 
 osgDB::Archive* Registry::getFromArchiveCache(const std::string& fileName)
 {
+	PRINT_FUNCTION_NAME
     OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_archiveCacheMutex);
     ArchiveCache::iterator itr = _archiveCache.find(fileName);
     if (itr!=_archiveCache.end()) return itr->second.get();
@@ -1681,6 +1743,7 @@ osgDB::Archive* Registry::getFromArchiveCache(const std::string& fileName)
 
 osg::ref_ptr<osgDB::Archive> Registry::getRefFromArchiveCache(const std::string& fileName)
 {
+	PRINT_FUNCTION_NAME
     OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_archiveCacheMutex);
     ArchiveCache::iterator itr = _archiveCache.find(fileName);
     if (itr!=_archiveCache.end()) return itr->second;
@@ -1689,18 +1752,21 @@ osg::ref_ptr<osgDB::Archive> Registry::getRefFromArchiveCache(const std::string&
 
 void Registry::clearArchiveCache()
 {
+	PRINT_FUNCTION_NAME
     OpenThreads::ScopedLock<OpenThreads::Mutex> lock(_archiveCacheMutex);
     _archiveCache.clear();
 }
 
 void Registry::releaseGLObjects(osg::State* state)
 {
+	PRINT_FUNCTION_NAME
     if (_objectCache.valid()) _objectCache->releaseGLObjects( state );
     if (_sharedStateManager.valid()) _sharedStateManager->releaseGLObjects( state );
 }
 
 SharedStateManager* Registry::getOrCreateSharedStateManager()
 {
+	PRINT_FUNCTION_NAME
     if (!_sharedStateManager) _sharedStateManager = new SharedStateManager;
 
     return _sharedStateManager.get();
@@ -1709,16 +1775,19 @@ SharedStateManager* Registry::getOrCreateSharedStateManager()
 
 void Registry::registerProtocol(const std::string& protocol)
 {
+	PRINT_FUNCTION_NAME
     _registeredProtocols.insert( convertToLowerCase(protocol) );
 }
 
 bool Registry::isProtocolRegistered(const std::string& protocol)
 {
+	PRINT_FUNCTION_NAME
     return (_registeredProtocols.find( convertToLowerCase(protocol) ) != _registeredProtocols.end());
 }
 
 void Registry::getReaderWriterListForProtocol(const std::string& protocol, ReaderWriterList& results) const
 {
+	PRINT_FUNCTION_NAME
     for(ReaderWriterList::const_iterator i = _rwList.begin(); i != _rwList.end(); ++i)
     {        if ((*i)->acceptsProtocol(protocol))
             results.push_back(*i);
@@ -1728,6 +1797,7 @@ void Registry::getReaderWriterListForProtocol(const std::string& protocol, Reade
 
 ReaderWriter* Registry::getReaderWriterForProtocolAndExtension(const std::string& protocol, const std::string& extension)
 {
+	PRINT_FUNCTION_NAME
     // try first the registered ReaderWriter
     ReaderWriter* result = getReaderWriterForExtension(extension);
     if (result && result->acceptsProtocol(protocol))
