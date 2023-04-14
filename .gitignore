@@ -105,4 +105,5 @@ _CPack_Packages/
 *.zip
 
 **/build
+**/build_x64
 **/.idea
