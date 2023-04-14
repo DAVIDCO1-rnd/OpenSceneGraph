@@ -13,11 +13,13 @@ def check_if_word_in_string(words_to_search, potential_function_declaration):
     return False
 
 def check_if_function_declaration(potential_function_declaration):
-    words_to_search = ['#define', 'if', 'while', 'for', 'struct', 'switch', 'case']
+    words_to_search = ['if', 'while', 'for', 'struct', 'switch', 'case']
     is_word_in_string = check_if_word_in_string(words_to_search, potential_function_declaration)
     if is_word_in_string == True:
         return False
     if potential_function_declaration.find("||") != -1:
+        return False
+    if potential_function_declaration.find("#define") != -1:
         return False
     pattern_that_starts_with_plus = '^[\s]*[\+]'
     match = re.search(pattern_that_starts_with_plus, potential_function_declaration)
