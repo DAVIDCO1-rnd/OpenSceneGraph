@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import os
 
 
 
@@ -58,9 +59,11 @@ def unclassify_data(code_folder, file_extension):
         add_line_at_the_beginning_of_every_function(fileFullPath)
 
 if __name__ == "__main__":
-    code_folder = r'../src/osgDB'
+    main_src_folder = r'../src'
+    subfolders = [f.path for f in os.scandir(main_src_folder) if f.is_dir()]
     #code_folder = r'CODE_FOLDER'
     files_extensions = ['cpp']
-    for file_extension in files_extensions:
-        unclassify_data(code_folder, file_extension)
+    for single_subfolder in subfolders:
+        for file_extension in files_extensions:
+            unclassify_data(single_subfolder, file_extension)
 
