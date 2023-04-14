@@ -13,7 +13,7 @@ def check_if_word_in_string(words_to_search, potential_function_declaration):
     return False
 
 def check_if_function_declaration(potential_function_declaration):
-    words_to_search = ['if', 'while', 'for', 'struct', 'switch', 'case']
+    words_to_search = ['#define', 'if', 'while', 'for', 'struct', 'switch', 'case']
     is_word_in_string = check_if_word_in_string(words_to_search, potential_function_declaration)
     if is_word_in_string == True:
         return False
@@ -53,9 +53,11 @@ def add_line_at_the_beginning_of_every_function(fileFullPath):
     with open(fileFullPath, 'w', encoding=enc) as f:
         f.write(new_full_file_content)
 
-def unclassify_data(code_folder, file_extension):
+def add_print_statements_to_files(subfolder_index, num_of_subfolders, code_folder, file_extension):
     files = [str(path) for path in Path(code_folder).rglob('*.' + file_extension)]
-    for fileFullPath in files:
+    num_of_files = len(files)
+    for file_index, fileFullPath in enumerate(files):
+        print(f'subfolder {subfolder_index + 1} out of {num_of_subfolders}: file {file_index + 1} out of {num_of_files}. file name: {fileFullPath}')
         add_line_at_the_beginning_of_every_function(fileFullPath)
 
 if __name__ == "__main__":
@@ -63,7 +65,10 @@ if __name__ == "__main__":
     subfolders = [f.path for f in os.scandir(main_src_folder) if f.is_dir()]
     #code_folder = r'CODE_FOLDER'
     files_extensions = ['cpp']
-    for single_subfolder in subfolders:
+    num_of_subfolders = len(subfolders)
+    for subfolder_index, single_subfolder in enumerate(subfolders):
         for file_extension in files_extensions:
-            unclassify_data(single_subfolder, file_extension)
+            add_print_statements_to_files(subfolder_index, num_of_subfolders, single_subfolder, file_extension)
+            print()
+        print()
 
