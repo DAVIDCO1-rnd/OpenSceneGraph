@@ -15,13 +15,11 @@
 #include <osgDB/FileUtils>
 
 #include <osg/Notify>
-#include "print_function_name.h"
 
 using namespace osgDB;
 
 XmlNode* osgDB::readXmlFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     std::string foundFile = osgDB::findDataFile(filename, options);
     if (!foundFile.empty())
     {
@@ -49,7 +47,6 @@ XmlNode* osgDB::readXmlFile(const std::string& filename,const Options* options)
 
 std::string osgDB::trimEnclosingSpaces(const std::string& str)
 {
-	PRINT_FUNCTION_NAME
     if (str.empty()) return str;
 
     const std::string whitespaces(" \t\f\v\n\r");
@@ -66,7 +63,6 @@ std::string osgDB::trimEnclosingSpaces(const std::string& str)
 
 XmlNode* osgDB::readXmlStream(std::istream& fin)
 {
-	PRINT_FUNCTION_NAME
     XmlNode::Input input;
     input.attach(fin);
     input.readAllDataIntoBuffer();
@@ -85,20 +81,17 @@ XmlNode* osgDB::readXmlStream(std::istream& fin)
 
 XmlNode::ControlMap::ControlMap()
 {
-	PRINT_FUNCTION_NAME
     setUpControlMappings();
 }
 
 void XmlNode::ControlMap::addControlToCharacter(const std::string& control, int c)
 {
-	PRINT_FUNCTION_NAME
     _controlToCharacterMap[control] = c;
     _characterToControlMap[c] = control;
 }
 
 void XmlNode::ControlMap::setUpControlMappings()
 {
-	PRINT_FUNCTION_NAME
     addControlToCharacter("&amp;",'&');
     addControlToCharacter("&lt;",'<');
     addControlToCharacter("&gt;",'>');
@@ -111,7 +104,6 @@ XmlNode::Input::Input():
     _currentPos(0),
     _encoding(ENCODING_ASCII)
 {
-	PRINT_FUNCTION_NAME
 }
 
 XmlNode::Input::Input(const Input& rhs):
@@ -119,29 +111,24 @@ XmlNode::Input::Input(const Input& rhs):
     _currentPos(0),
     _encoding(rhs._encoding)
 {
-	PRINT_FUNCTION_NAME
 }
 
 XmlNode::Input::~Input()
 {
-	PRINT_FUNCTION_NAME
 }
 void XmlNode::Input::open(const std::string& filename)
 {
-	PRINT_FUNCTION_NAME
     _fin.open(filename.c_str());
 }
 
 void XmlNode::Input::attach(std::istream& fin)
 {
-	PRINT_FUNCTION_NAME
     std::ios &fios = _fin;
     fios.rdbuf(fin.rdbuf());
 }
 
 void XmlNode::Input::readAllDataIntoBuffer()
 {
-	PRINT_FUNCTION_NAME
     while(_fin)
     {
         int c = _fin.get();
@@ -154,7 +141,6 @@ void XmlNode::Input::readAllDataIntoBuffer()
 
 void XmlNode::Input::skipWhiteSpace()
 {
-	PRINT_FUNCTION_NAME
     while(_currentPos<_buffer.size() && (_buffer[_currentPos]==' ' || _buffer[_currentPos]=='\t' || _buffer[_currentPos]=='\n' || _buffer[_currentPos]=='\r'))
     {
         //OSG_NOTICE<<"_currentPos="<<_currentPos<<"_buffer.size()="<<_buffer.size()<<" v="<<int(_buffer[_currentPos])<<std::endl;
@@ -165,13 +151,11 @@ void XmlNode::Input::skipWhiteSpace()
 
 XmlNode::XmlNode()
 {
-	PRINT_FUNCTION_NAME
     type = UNASSIGNED;
 }
 
 bool XmlNode::read(Input& input)
 {
-	PRINT_FUNCTION_NAME
     if (type == UNASSIGNED) type = ROOT;
 
     while(input)
@@ -443,14 +427,12 @@ bool XmlNode::read(Input& input)
 
 bool XmlNode::write(std::ostream& fout, const std::string& indent) const
 {
-	PRINT_FUNCTION_NAME
     ControlMap controlMap;
     return write(controlMap, fout, indent);
 }
 
 bool XmlNode::write(const ControlMap& controlMap, std::ostream& fout, const std::string& indent) const
 {
-	PRINT_FUNCTION_NAME
     switch(type)
     {
         case(UNASSIGNED):
@@ -500,7 +482,6 @@ bool XmlNode::write(const ControlMap& controlMap, std::ostream& fout, const std:
 
 bool XmlNode::writeString(const ControlMap& controlMap, std::ostream& fout, const std::string& str) const
 {
-	PRINT_FUNCTION_NAME
     for(std::string::const_iterator itr = str.begin();
         itr != str.end();
         ++itr)
@@ -515,7 +496,6 @@ bool XmlNode::writeString(const ControlMap& controlMap, std::ostream& fout, cons
 
 bool XmlNode::writeChildren(const ControlMap& /*controlMap*/, std::ostream& fout, const std::string& indent) const
 {
-	PRINT_FUNCTION_NAME
     for(Children::const_iterator citr = children.begin();
         citr != children.end();
         ++citr)
@@ -529,7 +509,6 @@ bool XmlNode::writeChildren(const ControlMap& /*controlMap*/, std::ostream& fout
 
 bool XmlNode::writeProperties(const ControlMap& controlMap, std::ostream& fout) const
 {
-	PRINT_FUNCTION_NAME
     for(Properties::const_iterator oitr = properties.begin();
         oitr != properties.end();
         ++oitr)
@@ -545,7 +524,6 @@ bool XmlNode::writeProperties(const ControlMap& controlMap, std::ostream& fout) 
 
 bool XmlNode::readAndReplaceControl(std::string& in_contents, XmlNode::Input& input) const
 {
-	PRINT_FUNCTION_NAME
     int c = 0;
     std::string value;
     while(input && (c=input.get())!=';') { value.push_back(c); }
