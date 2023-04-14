@@ -26,15 +26,12 @@
 #include <osgDB/Registry>
 #include <osgDB/ReadFile>
 
-#include "print_function_name.h"
-
 using namespace osg;
 using namespace osgDB;
 
 #ifdef OSG_PROVIDE_READFILE
 Object* osgDB::readObjectFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readObject(filename,options);
     if (rr.validObject()) return rr.takeObject();
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -44,7 +41,6 @@ Object* osgDB::readObjectFile(const std::string& filename,const Options* options
 
 Image* osgDB::readImageFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readImage(filename,options);
     if (rr.validImage()) return rr.takeImage();
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -53,7 +49,6 @@ Image* osgDB::readImageFile(const std::string& filename,const Options* options)
 
 Shader* osgDB::readShaderFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readShader(filename,options);
     if (rr.validShader()) return rr.takeShader();
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -63,7 +58,6 @@ Shader* osgDB::readShaderFile(const std::string& filename,const Options* options
 
 HeightField* osgDB::readHeightFieldFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readHeightField(filename,options);
     if (rr.validHeightField()) return rr.takeHeightField();
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -73,7 +67,6 @@ HeightField* osgDB::readHeightFieldFile(const std::string& filename,const Option
 
 Node* osgDB::readNodeFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readNode(filename,options);
     if (rr.validNode()) return rr.takeNode();
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -82,20 +75,17 @@ Node* osgDB::readNodeFile(const std::string& filename,const Options* options)
 
 Node* osgDB::readNodeFiles(std::vector<std::string>& fileList,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     return readRefNodeFiles(fileList, options).release();
 }
 
 Node* osgDB::readNodeFiles(osg::ArgumentParser& arguments,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     return readRefNodeFiles(arguments, options).release();
 }
 
 
 Script* osgDB::readScriptFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readScript(filename,options);
     if (rr.validScript()) return rr.takeScript();
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -105,7 +95,6 @@ Script* osgDB::readScriptFile(const std::string& filename,const Options* options
 
 osg::ref_ptr<osg::Object> osgDB::readRefObjectFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readObject(filename,options);
     if (rr.validObject()) return osg::ref_ptr<osg::Object>(rr.getObject());
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -114,7 +103,6 @@ osg::ref_ptr<osg::Object> osgDB::readRefObjectFile(const std::string& filename,c
 
 osg::ref_ptr<osg::Image> osgDB::readRefImageFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readImage(filename,options);
     if (rr.validImage()) return osg::ref_ptr<osg::Image>(rr.getImage());
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -123,7 +111,6 @@ osg::ref_ptr<osg::Image> osgDB::readRefImageFile(const std::string& filename,con
 
 osg::ref_ptr<osg::Shader> osgDB::readRefShaderFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readShader(filename,options);
     if (rr.validShader()) return osg::ref_ptr<osg::Shader>(rr.getShader());
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -132,7 +119,6 @@ osg::ref_ptr<osg::Shader> osgDB::readRefShaderFile(const std::string& filename,c
 
 osg::ref_ptr<osg::HeightField> osgDB::readRefHeightFieldFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readHeightField(filename,options);
     if (rr.validHeightField()) return osg::ref_ptr<osg::HeightField>(rr.getHeightField());
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -141,7 +127,6 @@ osg::ref_ptr<osg::HeightField> osgDB::readRefHeightFieldFile(const std::string& 
 
 osg::ref_ptr<osg::Node> osgDB::readRefNodeFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readNode(filename,options);
     if (rr.validNode()) return osg::ref_ptr<osg::Node>(rr.getNode());
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -150,7 +135,6 @@ osg::ref_ptr<osg::Node> osgDB::readRefNodeFile(const std::string& filename,const
 
 osg::ref_ptr<osg::Script> osgDB::readRefScriptFile(const std::string& filename,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readScript(filename,options);
     if (rr.validScript()) return osg::ref_ptr<osg::Script>(rr.getScript());
     if (!rr.success()) OSG_WARN << "Error reading file " << filename << ": " << rr.statusMessage() << std::endl;
@@ -159,7 +143,6 @@ osg::ref_ptr<osg::Script> osgDB::readRefScriptFile(const std::string& filename,c
 
 osg::ref_ptr<Node> osgDB::readRefNodeFiles(std::vector<std::string>& fileList,const Options* options)
 {
-	PRINT_FUNCTION_NAME
     typedef std::vector< osg::ref_ptr<osg::Node> > NodeList;
     NodeList nodeList;
 
@@ -203,7 +186,6 @@ osg::ref_ptr<Node> osgDB::readRefNodeFiles(std::vector<std::string>& fileList,co
 
 osg::ref_ptr<Node> osgDB::readRefNodeFiles(osg::ArgumentParser& arguments,const Options* options)
 {
-	PRINT_FUNCTION_NAME
 
     typedef std::vector< osg::ref_ptr<osg::Node> > NodeList;
     NodeList nodeList;
@@ -318,7 +300,6 @@ osg::ref_ptr<Node> osgDB::readRefNodeFiles(osg::ArgumentParser& arguments,const 
 
 osg::ref_ptr<osg::Shader> osgDB::readRefShaderFileWithFallback(osg::Shader::Type type, const std::string& filename, const Options* options, const char* fallback)
 {
-	PRINT_FUNCTION_NAME
     ReaderWriter::ReadResult rr = Registry::instance()->readShader(filename,options);
     osg::ref_ptr<osg::Shader> shader = rr.getShader();
     if (!rr.success())
