@@ -1,18 +1,35 @@
 #ifndef OSG_PRINT_FUNCTION_NAME
 #define OSG_PRINT_FUNCTION_NAME
+
 #include <iostream>
 
-#define PRINT_FUNCTION_NAME EntryRaiiObject print_details_at_the_beginning_of_function(__FUNCTION__);
+#define PRINT_FUNCTION_NAME TrailFunctions print_details_at_the_beginning_of_function(__FUNCTION__);
 
-struct EntryRaiiObject {
-	EntryRaiiObject(const char *f) : function_name(f)
-	{ 
-		printf("Entered into %s\n", function_name);
-	}
-	~EntryRaiiObject() 
-	{ 
-		printf("Exited from %s\n\n", function_name);
-	}
+class TrailFunctions {
+private:
+	static int entry_counter;
 	const char *function_name;
+
+public:
+	TrailFunctions(const char *f) : function_name(f)
+	{
+		if (entry_counter == 0)
+		{
+			printf("Entered into %s\n", function_name);
+		}
+		entry_counter++;
+
+	}
+	~TrailFunctions()
+	{
+		entry_counter--;
+		if (entry_counter == 0)
+		{
+			printf("Exited from %s\n\n", function_name);
+		}
+	}
 };
+
+int TrailFunctions::entry_counter = 0;
+
 #endif
