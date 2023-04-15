@@ -2,6 +2,11 @@ from pathlib import Path
 import re
 import os
 
+def get_files_list(file_path):
+    with open(file_path) as file:
+        files_list = [line.rstrip() for line in file]
+    return files_list
+
 
 
 def check_if_word_in_string(words_to_search, potential_function_declaration):
@@ -55,30 +60,36 @@ def add_line_at_the_beginning_of_every_function(fileFullPath):
     with open(fileFullPath, 'w', encoding=enc) as f:
         f.write(new_full_file_content)
 
-def add_print_statements_to_files(subfolder_index, num_of_subfolders, code_folder_path, file_extension):
-    last_folder_name = os.path.basename(os.path.normpath(code_folder_path))
-    if last_folder_name == 'osgWrappers':
-        subfolders = [f.path for f in os.scandir(code_folder_path) if f.is_dir() and f.name != 'serializers']
-        files = []
-        for single_subfolder in subfolders:
-            files_of_single_subfolder = [str(path) for path in Path(single_subfolder).rglob('*.' + file_extension)]
-            files = files + files_of_single_subfolder
-    else:
-        files = [str(path) for path in Path(code_folder_path).rglob('*.' + file_extension)]
-    num_of_files = len(files)
-    for file_index, fileFullPath in enumerate(files):
-        print(f'subfolder {subfolder_index + 1} out of {num_of_subfolders}: file {file_index + 1} out of {num_of_files}. file name: {fileFullPath}')
-        add_line_at_the_beginning_of_every_function(fileFullPath)
+# def add_print_statements_to_files(subfolder_index, num_of_subfolders, code_folder_path, file_extension):
+#     last_folder_name = os.path.basename(os.path.normpath(code_folder_path))
+#     if last_folder_name == 'osgWrappers':
+#         subfolders = [f.path for f in os.scandir(code_folder_path) if f.is_dir() and f.name != 'serializers']
+#         files = []
+#         for single_subfolder in subfolders:
+#             files_of_single_subfolder = [str(path) for path in Path(single_subfolder).rglob('*.' + file_extension)]
+#             files = files + files_of_single_subfolder
+#     else:
+#         files = [str(path) for path in Path(code_folder_path).rglob('*.' + file_extension)]
+#     num_of_files = len(files)
+#     for file_index, fileFullPath in enumerate(files):
+#         print(f'subfolder {subfolder_index + 1} out of {num_of_subfolders}: file {file_index + 1} out of {num_of_files}. file name: {fileFullPath}')
+#         add_line_at_the_beginning_of_every_function(fileFullPath)
 
 if __name__ == "__main__":
     main_src_folder = r'../src'
-    subfolders = [f.path for f in os.scandir(main_src_folder) if f.is_dir()]
+    subfolders_names = [f.name for f in os.scandir(main_src_folder) if f.is_dir()]
     #code_folder = r'CODE_FOLDER'
-    files_extensions = ['cpp']
-    num_of_subfolders = len(subfolders)
-    for subfolder_index, single_subfolder in enumerate(subfolders):
-        for file_extension in files_extensions:
-            add_print_statements_to_files(subfolder_index, num_of_subfolders, single_subfolder, file_extension)
-            print()
+    num_of_subfolders = len(subfolders_names)
+    for subfolder_index, single_subfolder_name in enumerate(subfolders_names):
+        if single_subfolder_name == 'osgPlugins' or single_subfolder_name == 'osgWrappers':
+            continue
+        sub_folder_info_file = os.path.join('osg_cpp_folders', single_subfolder_name, 'files_list.txt')
+        files_list = get_files_list(sub_folder_info_file)
+        num_of_files = len(files_list)
+        for file_index, file_name in enumerate(files_list):
+            fileFullPath = os.path.join(main_src_folder, single_subfolder_name, file_name)
+            print(f'subfolder {subfolder_index + 1} out of {num_of_subfolders}: file {file_index + 1} out of {num_of_files}. file name: {fileFullPath}')
+            add_line_at_the_beginning_of_every_function(fileFullPath)
+        print()
         print()
 
