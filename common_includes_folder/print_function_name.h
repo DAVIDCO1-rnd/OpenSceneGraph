@@ -32,6 +32,8 @@ public:
 	}
 };
 
+#ifndef TrailFunctions::entry_counter
 int TrailFunctions::entry_counter = 0;
+#endif
 
 #endif
