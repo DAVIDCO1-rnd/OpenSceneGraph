@@ -55,8 +55,16 @@ def add_line_at_the_beginning_of_every_function(fileFullPath):
     with open(fileFullPath, 'w', encoding=enc) as f:
         f.write(new_full_file_content)
 
-def add_print_statements_to_files(subfolder_index, num_of_subfolders, code_folder, file_extension):
-    files = [str(path) for path in Path(code_folder).rglob('*.' + file_extension)]
+def add_print_statements_to_files(subfolder_index, num_of_subfolders, code_folder_path, file_extension):
+    last_folder_name = os.path.basename(os.path.normpath(code_folder_path))
+    if last_folder_name == 'osgWrappers':
+        subfolders = [f.path for f in os.scandir(code_folder_path) if f.is_dir() and f.name != 'serializers']
+        files = []
+        for single_subfolder in subfolders:
+            files_of_single_subfolder = [str(path) for path in Path(single_subfolder).rglob('*.' + file_extension)]
+            files = files + files_of_single_subfolder
+    else:
+        files = [str(path) for path in Path(code_folder_path).rglob('*.' + file_extension)]
     num_of_files = len(files)
     for file_index, fileFullPath in enumerate(files):
         print(f'subfolder {subfolder_index + 1} out of {num_of_subfolders}: file {file_index + 1} out of {num_of_files}. file name: {fileFullPath}')
