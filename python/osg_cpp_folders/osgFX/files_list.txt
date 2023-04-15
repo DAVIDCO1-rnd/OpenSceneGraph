@@ -1,0 +1,12 @@
+AnisotropicLighting.cpp
+BumpMapping.cpp
+Cartoon.cpp
+Effect.cpp
+MultiTextureControl.cpp
+Outline.cpp
+Registry.cpp
+Scribe.cpp
+SpecularHighlights.cpp
+Technique.cpp
+Validator.cpp
+Version.cpp

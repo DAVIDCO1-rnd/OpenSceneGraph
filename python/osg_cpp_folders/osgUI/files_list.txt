@@ -1,0 +1,15 @@
+Widget.cpp
+ColorPalette.cpp
+Label.cpp
+LineEdit.cpp
+Dialog.cpp
+Popup.cpp
+PushButton.cpp
+ComboBox.cpp
+Callbacks.cpp
+Style.cpp
+AlignmentSettings.cpp
+FrameSettings.cpp
+TabWidget.cpp
+TextSettings.cpp
+Validator.cpp

@@ -1,0 +1,11 @@
+DefaultFont.cpp
+GlyphGeometry.cpp
+Font.cpp
+FadeText.cpp
+Glyph.cpp
+String.cpp
+Style.cpp
+TextBase.cpp
+Text.cpp
+Text3D.cpp
+Version.cpp
