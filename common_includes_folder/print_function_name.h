@@ -20,6 +20,8 @@ public:
 		entry_counter++;
 
 	}
+
+
 	~TrailFunctions()
 	{
 		entry_counter--;
