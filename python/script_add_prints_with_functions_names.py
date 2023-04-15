@@ -5,6 +5,7 @@ import os
 def get_files_list(file_path):
     with open(file_path) as file:
         files_list = [line.rstrip() for line in file]
+    files_list = list(single_file for single_file in files_list if single_file)  # Non-blank lines
     return files_list
 
 
