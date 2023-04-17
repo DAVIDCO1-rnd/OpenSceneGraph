@@ -1367,3 +1367,10 @@ ADD_CUSTOM_TARGET(uninstall
 #
 include(FeatureSummary)
 feature_summary(WHAT ALL)
+
+message(STATUS "david: CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
+include(${CMAKE_SOURCE_DIR}/cmake/utils/printer.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/utils/version/version.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/utils/export.cmake)
+add_subdirectory(third_party)
+add_subdirectory(utilities/file_loader)

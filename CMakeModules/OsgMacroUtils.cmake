@@ -226,6 +226,11 @@ MACRO(SETUP_LIBRARY LIB_NAME)
             ${TARGET_H_NO_MODULE_INSTALL}
             ${TARGET_SRC}
         )
+        
+        LIST(APPEND TARGET_LIBRARIES viper::third_party::boost)
+        LIST(APPEND TARGET_LIBRARIES viper::third_party::json)
+        LIST(APPEND TARGET_LIBRARIES viper::file_loader)
+
         target_include_directories(${LIB_NAME} PUBLIC ${common_includes_folder})
         SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES FOLDER "OSG Core")
         IF(APPLE)
@@ -239,12 +244,15 @@ MACRO(SETUP_LIBRARY LIB_NAME)
         ENDIF(TARGET_LABEL)
 
         IF(TARGET_LIBRARIES)
+            message(STATUS "david: LINK_INTERNAL")
             LINK_INTERNAL(${LIB_NAME} ${TARGET_LIBRARIES})
         ENDIF()
         IF(TARGET_EXTERNAL_LIBRARIES)
+            message(STATUS "david: LINK_EXTERNAL")
             LINK_EXTERNAL(${LIB_NAME} ${TARGET_EXTERNAL_LIBRARIES})
         ENDIF()
         IF(TARGET_LIBRARIES_VARS)
+            message(STATUS "david: LINK_WITH_VARIABLES")
             LINK_WITH_VARIABLES(${LIB_NAME} ${TARGET_LIBRARIES_VARS})
         ENDIF(TARGET_LIBRARIES_VARS)
         LINK_CORELIB_DEFAULT(${LIB_NAME})

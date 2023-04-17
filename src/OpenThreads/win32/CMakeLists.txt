@@ -31,6 +31,13 @@ ADD_LIBRARY(${LIB_NAME}
 )
 target_include_directories(${LIB_NAME} PUBLIC ${common_includes_folder})
 
+target_link_libraries(${LIB_NAME} 
+	PUBLIC 
+	viper::third_party::boost
+	viper::third_party::json
+	viper::file_loader	
+)
+
 SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES FOLDER "OSG Core")
 IF(OPENTHREADS_SONAMES)
   SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES VERSION ${OPENTHREADS_VERSION} SOVERSION ${OPENTHREADS_SOVERSION})
