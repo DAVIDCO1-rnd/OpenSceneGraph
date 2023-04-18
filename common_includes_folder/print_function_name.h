@@ -3,11 +3,12 @@
 
 #include <iostream>
 
+extern int entry_counter; // Declaration with external linkage
+
 #define PRINT_FUNCTION_NAME TrailFunctions print_details_at_the_beginning_of_function(__FUNCTION__);
 
 class TrailFunctions {
 private:
-	static int entry_counter;
 	const char *function_name;
 
 public:
@@ -18,9 +19,7 @@ public:
 			printf("Entered into %s\n", function_name);
 		}
 		entry_counter++;
-
 	}
-
 
 	~TrailFunctions()
 	{
@@ -31,9 +30,5 @@ public:
 		}
 	}
 };
-
-#ifndef TrailFunctions::entry_counter
-int TrailFunctions::entry_counter = 0;
-#endif
 
 #endif
