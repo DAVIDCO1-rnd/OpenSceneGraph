@@ -44,18 +44,14 @@ def replace(single_match):
 
 def change_file_content(full_file_content):
     include_line_to_add = '#include "print_function_name.h"'
-    entry_counter_static_initialization = 'static int entry_counter = 0;'
+    #entry_counter_static_initialization = 'static int entry_counter = 0;'
     pattern_1 = '^.*,[\s]+.*\)[\s]+{'
     pattern_2 = '^.+[ \r]+.+[:]?[:]?.+\(.*\)[\s]*{'
     pattern_3 = '.*[\s]*const[\s]*{'
     pattern = pattern_1 + '|' + pattern_2 + '|' + pattern_3
     # matches_list = re.findall(pattern, full_file_content, re.MULTILINE)
     new_full_file_content = re.sub(pattern, replace, full_file_content, flags=re.MULTILINE)
-    new_full_file_content = include_line_to_add + \
-                            '\n' + \
-                            entry_counter_static_initialization + \
-                            '\n\n' + \
-                            new_full_file_content
+    new_full_file_content = include_line_to_add + '\n\n' + new_full_file_content
     return new_full_file_content
 
 def add_line_at_the_beginning_of_every_function(fileFullPath):

@@ -3,7 +3,14 @@
 
 #include <iostream>
 
-extern int entry_counter; // Declaration with external linkage
+int entry_counter;
+
+void initialize_entry_contour()
+{
+	entry_counter = 0;
+}
+
+
 
 #define PRINT_FUNCTION_NAME TrailFunctions print_details_at_the_beginning_of_function(__FUNCTION__);
 
