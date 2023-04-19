@@ -31,6 +31,7 @@ ApplicationUsage::ApplicationUsage(const std::string& commandLineUsage):
 
 ApplicationUsage* ApplicationUsage::instance()
 {
+    initialize_entry_contour();
     static osg::ref_ptr<ApplicationUsage> s_applicationUsage = new ApplicationUsage;
     return s_applicationUsage.get();
 }
