@@ -503,7 +503,7 @@ ENDIF()
 OPTION(BUILD_OSG_APPLICATIONS "Enable to build OSG Applications (e.g. osgviewer)" ON)
 
 # OSG Examples
-OPTION(BUILD_OSG_EXAMPLES "Enable to build OSG Examples" OFF)
+OPTION(BUILD_OSG_EXAMPLES "Enable to build OSG Examples" ON)
 
 ################################################################################
 # 3rd Party Dependency Stuff
